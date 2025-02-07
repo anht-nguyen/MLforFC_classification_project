@@ -13,7 +13,7 @@ from scripts.datasets_loader import load_datasets, FC_dataset
 from scripts.utils import get_files_by_class, split_datasets, dataset_type_converter, get_accuracy_measures
 from scripts.config import (
     FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS, NUM_CLASSES, DEVICE,
-    NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL
+    NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL, NUM_CHANNELS
 )
 from scripts.save_results import save_to_json
 from scripts.models.dl_models_cores import train_model, evaluate_model, MLPClassifier
@@ -46,7 +46,7 @@ def mlp_objective(trial, full_dataset, num_classes, device):
 
         # Initialize model with selected hyperparameters
         model = MLPClassifier(
-            input_size=full_dataset[0][0].numel(),  # Dynamically set input size
+            input_size=NUM_CHANNELS,  # Dynamically set input size
             hidden_dim=hidden_dim, num_layers=num_layers, num_classes=num_classes
         ).to(device)
 
@@ -98,7 +98,7 @@ def train_mlp_model(FC_name, full_dataset):
 
         # Initialize final model
         model = MLPClassifier(
-            input_size=full_dataset[0][0].numel(),
+            input_size=NUM_CHANNELS,
             hidden_dim=hidden_dim, num_layers=num_layers, num_classes=NUM_CLASSES
         ).to(DEVICE)
 

@@ -28,5 +28,8 @@ NUM_CLASSES = 6
 # Number of frequencies in the PSD data
 NUM_FREQS = 27
 
+# number of EEG channels used to compute FC
+NUM_CHANNELS = 10
+
 # Device to use for training (CPU/GPU)
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")

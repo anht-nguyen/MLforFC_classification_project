@@ -8,6 +8,7 @@ from torch_geometric.data import Data
 from torch.utils.data import Dataset
 from scipy.io import loadmat
 
+from scripts.config import NUM_CHANNELS
 
 # ✅ CNN Model Definition
 class CNNClassifier(nn.Module):
@@ -66,11 +67,11 @@ class MLPClassifier(nn.Module):
         ])
 
         # Compute input size for fully connected layer dynamically
-        dummy_input = torch.randn(1, input_size)
+        dummy_input = torch.randn(1, 1, NUM_CHANNELS, NUM_CHANNELS)
         dummy_output = self.input_layer(dummy_input)
         for layer in self.hidden_layers:
             dummy_output = layer(dummy_output)
-        fc_input_size = dummy_output.shape[1]
+        fc_input_size = dummy_output.flatten(1).shape[1]
 
         # Output Layer
         self.output_layer = nn.Linear(fc_input_size, num_classes)
