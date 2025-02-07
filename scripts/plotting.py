@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np  
 from sklearn.metrics import roc_curve, auc, RocCurveDisplay
-from utils import average_fpr
+from scripts.utils import average_fpr
 
 def plot_heatmap(matrix, title):
     plt.figure(figsize=(8, 6))

@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score, roc_auc_score, confusion_matrix
 from sklearn.model_selection import RepeatedStratifiedKFold
 from functools import partial
 
-from scripts.datasets_loader import load_datasets, FC_datasets
+from scripts.datasets_loader import load_datasets, FC_dataset
 from scripts.utils import get_files_by_class, split_datasets, flatten_transform, dataset_type_converter, get_accuracy_measures 
 from scripts.config import FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS, NUM_CLASSES
 from scripts.save_results import save_to_json

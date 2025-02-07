@@ -8,10 +8,6 @@ import numpy as np
 from scipy.interpolate import interp1d # Import the interp1d function
 
 
-
-from ML_models_training_validating import test_model_torch
-
-
 # Dictionary to store file paths for each class
 def get_files_by_class(basepath):
   file_paths_by_class = {}
@@ -65,9 +61,9 @@ def dataset_type_converter(matlabdataset):
 
     return data_dict
 
-def cm_generator(test_loader):
-  y_true, y_pred, _ = test_model_torch()
-  return pd.DataFrame(confusion_matrix(y_true, y_pred))
+# def cm_generator(test_loader):
+#   y_true, y_pred, _ = test_model_torch()
+#   return pd.DataFrame(confusion_matrix(y_true, y_pred))
 
 def construct_confusion_matrix(y_true, y_pred, class_names):
     # Compute the confusion matrix

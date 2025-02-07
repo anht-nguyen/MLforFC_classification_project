@@ -9,14 +9,15 @@ from torch.optim import Adam
 from torch_geometric.loader import DataLoader
 from torch.utils.data import Dataset
 
-from scripts.datasets_loader import load_datasets, FC_datasets
-from scripts.utils import get_files_by_class, split_datasets, dataset_type_converter, get_accuracy_measures, MatlabDataset
+from scripts.datasets_loader import load_datasets, FC_dataset
+from scripts.utils import get_files_by_class, split_datasets, dataset_type_converter, get_accuracy_measures
 from scripts.config import (
     FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS, NUM_CLASSES, DEVICE,
     NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL
 )
 from scripts.save_results import save_to_json
 from scripts.models.dl_models_cores import train_model, evaluate_model, MLPClassifier
+from scripts.models.ml_models_cores import MatlabDataset
 
 # Store output results
 output_data = {}
@@ -132,6 +133,14 @@ def main():
     """
     Main execution function to process all Functional Connectivity (FC) metrics.
     """
+    # Check CUDA availability and print CUDA info
+    if torch.cuda.is_available():
+        print(f"CUDA is available. Using GPU: {torch.cuda.get_device_name(0)}")
+        print(f"CUDA device count: {torch.cuda.device_count()}")
+        print(f"Current CUDA device: {torch.cuda.current_device()}")
+    else:
+        print("CUDA is not available. Using CPU.")
+
     load_datasets()
 
     for FC_name in os.listdir(FC_DATA_PATH):

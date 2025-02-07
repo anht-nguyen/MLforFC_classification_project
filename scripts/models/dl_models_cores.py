@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -104,8 +105,8 @@ def train_model(model, model_name, epochs, criterion, optimizer, train_loader, d
 
             optimizer.zero_grad()
 
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
+            outputs = model(inputs).to(device)
+            loss = criterion(outputs, labels).to(device)
 
             loss.backward()
             optimizer.step()
@@ -145,7 +146,7 @@ def evaluate_model(model, test_loader, device):
             labels = labels.to(device)
             images = images.unsqueeze(1).to(device)
 
-            outputs = model(images)
+            outputs = model(images).to(device)
             probabilities = torch.softmax(outputs, dim=1)
 
             # Store predictions and scores
@@ -214,8 +215,17 @@ class GraphDataset(Dataset):
             matrix = torch.tensor(matrix, dtype=torch.float32)
 
             # Extract subject ID and epoch index
-            subject_ID = file_path.split("/")[-1][:10]
-            epoch_idx = file_path.split("-")[-1].split(".")[0]
+            if os.name == 'nt':  # Windows
+                last_backslash_index = file_path.rfind('\\')
+            else:  # Linux or other OS
+                last_backslash_index = file_path.rfind('/')
+
+            subject_ID = file_path[last_backslash_index+1:last_backslash_index+11]
+            # print(subject_ID)
+            last_dash_index = file_path.rfind('-')
+            last_dot_index = file_path.rfind('.')
+            epoch_idx = file_path[last_dash_index+1:last_dot_index]
+            # print(epoch_idx)
 
             # Find corresponding PSD feature file
             PSD_path_list = self.features[class_name]
@@ -349,8 +359,8 @@ def train_gnn(model, train_loader, optimizer, criterion, epochs, device):
         for data in train_loader:
             data = data.to(device)  
             optimizer.zero_grad()  
-            out = model(data)
-            loss = criterion(out, data.y)
+            out = model(data).to(device)
+            loss = criterion(out, data.y).to(device)
             loss.backward()
             optimizer.step()
 
@@ -386,7 +396,7 @@ def evaluate_gnn(model, test_loader, device):
     with torch.no_grad():
         for data in test_loader:
             data = data.to(device)
-            outputs = model(data)
+            outputs = model(data).to(device)
             probabilities = torch.softmax(outputs, dim=1)
 
             preds = torch.argmax(outputs, dim=1)

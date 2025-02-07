@@ -1,8 +1,7 @@
 import os
 from scipy.io import loadmat
-from utils import get_files_by_class
-from plotting import plot_heatmap
-
+from scripts.utils import get_files_by_class
+from scripts.plotting import plot_heatmap
 from scripts.config import FC_DATA_PATH, PSD_DATA_PATH
 
 import shutil
@@ -14,28 +13,30 @@ if not os.path.exists(data_folder):
     os.makedirs(data_folder)
     print(f"📁 Created data folder: {data_folder}")
 
-# Move zip files from dataset_zip to data and unzip them
-dataset_zip_folder = os.path.join(os.getcwd(), 'dataset_zip')
-if os.path.exists(dataset_zip_folder):
-    for file_name in os.listdir(dataset_zip_folder):
-        if file_name.endswith('.zip'):
-            zip_file_path = os.path.join(dataset_zip_folder, file_name)
-            shutil.move(zip_file_path, data_folder)
-            print(f"📦 Moved zip file: {zip_file_path} to {data_folder}")
+    # Move zip files from dataset_zip to data and unzip them
+    dataset_zip_folder = os.path.join(os.getcwd(), 'dataset_zip')
+    if os.path.exists(dataset_zip_folder):
+        for file_name in os.listdir(dataset_zip_folder):
+            if file_name.endswith('.zip'):
+                zip_file_path = os.path.join(dataset_zip_folder, file_name)
+                shutil.move(zip_file_path, data_folder)
+                print(f"📦 Moved zip file: {zip_file_path} to {data_folder}")
 
-            # Unzip the file
-            with zipfile.ZipFile(os.path.join(data_folder, file_name), 'r') as zip_ref:
-                zip_ref.extractall(data_folder)
-                print(f"📂 Unzipped: {file_name}")
+                # Unzip the file
+                with zipfile.ZipFile(os.path.join(data_folder, file_name), 'r') as zip_ref:
+                    zip_ref.extractall(data_folder)
+                    print(f"📂 Unzipped: {file_name}")
+
+        
 
 # Global dictionaries to store datasets
-FC_datasets = {}  # Stores Functional Connectivity (FC) data
+FC_dataset = {}  # Stores Functional Connectivity (FC) data
 PSD_dataset = {}  # Stores EEG PSD data
 
 
 def load_datasets():
     """Loads and processes datasets, removing unwanted files."""
-    global FC_datasets, PSD_dataset  # Ensure global access
+    global FC_dataset, PSD_dataset  # Ensure global access
 
     print("🔄 Loading datasets...")
 
@@ -54,7 +55,7 @@ def load_datasets():
     try:
         for FC_name in os.listdir(FC_DATA_PATH):
             basepath = os.path.join(FC_DATA_PATH, FC_name)
-            FC_datasets[FC_name] = get_files_by_class(basepath)
+            FC_dataset[FC_name] = get_files_by_class(basepath)
             print(f"📂 Loaded FC dataset: {FC_name}")
     except Exception as e:
         print(f"❌ Error loading FC datasets: {e}")
@@ -67,6 +68,8 @@ def load_datasets():
         print(f"❌ Error loading PSD dataset: {e}")
 
     print("✅ Dataset loading complete!")
+    
+    return FC_dataset, PSD_dataset
 
 # Ensure it only runs when executed directly
 if __name__ == "__main__":
