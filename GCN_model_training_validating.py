@@ -20,6 +20,7 @@ from scripts.models.dl_models_cores import train_gnn, evaluate_gnn, GCN, GraphDa
 # ✅ Enable CUDA performance optimizations
 torch.backends.cudnn.benchmark = True  # Optimizes CNNs on fixed input sizes
 torch.backends.cuda.matmul.allow_tf32 = True  # Allows TF32 precision for better speed
+torch.backends.cudnn.deterministic = False  # Enables non-deterministic algorithms
 
 # Store output results
 output_data = {}
@@ -48,8 +49,8 @@ def gcn_objective(trial, full_dataset, num_classes, device):
         train_subset = torch.utils.data.Subset(full_dataset.graphs, train_idx)
         test_subset = torch.utils.data.Subset(full_dataset.graphs, test_idx)
 
-        train_loader = DataLoader(train_subset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
-        test_loader = DataLoader(test_subset, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
+        train_loader = DataLoader(train_subset, batch_size=batch_size, shuffle=True, num_workers=8, pin_memory=True)
+        test_loader = DataLoader(test_subset, batch_size=batch_size, shuffle=False, num_workers=8, pin_memory=True)
 
         # Initialize model with trial-selected hyperparameters
         model = GCN(
@@ -104,8 +105,8 @@ def train_gcn_model(FC_name, full_dataset):
         train_subset = torch.utils.data.Subset(full_dataset.graphs, train_idx)
         test_subset = torch.utils.data.Subset(full_dataset.graphs, test_idx)
 
-        train_loader = DataLoader(train_subset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
-        test_loader = DataLoader(test_subset, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
+        train_loader = DataLoader(train_subset, batch_size=batch_size, shuffle=True, num_workers=8, pin_memory=True, persistent_workers=True)
+        test_loader = DataLoader(test_subset, batch_size=batch_size, shuffle=False, num_workers=8, pin_memory=True, persistent_workers=True)
 
         # Initialize final model
         model = GCN(
