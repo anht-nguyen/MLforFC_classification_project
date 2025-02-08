@@ -331,26 +331,29 @@ class GCN(nn.Module):
         return edge_index
 
 
-# ✅ GNN Training Function
-def train_gnn(model, train_loader, optimizer, criterion, epochs, device):
+def train_gnn(model, train_loader, optimizer, criterion, epochs, device, patience=15):
     """
-    Trains the GCN model.
+    Trains the GCN model with early stopping.
 
     Args:
-        model: GCN model.
+        model: The GCN model.
         train_loader: DataLoader for training data.
         optimizer: Optimizer.
         criterion: Loss function.
-        epochs: Number of epochs.
+        epochs: Maximum number of epochs.
         device: CPU/GPU.
+        patience: Number of epochs to wait before stopping if no improvement.
 
     Returns:
-        loss_history: List of loss values per epoch.
         acc_history: List of accuracy values per epoch.
+        loss_history: List of loss values per epoch.
     """
     loss_history = []
     acc_history = []
+    best_loss = float("inf")  # Initialize best validation loss
+    patience_counter = 0  # Tracks epochs without improvement
 
+    model.to(device)
     model.train()
 
     for epoch in range(epochs):
@@ -360,8 +363,8 @@ def train_gnn(model, train_loader, optimizer, criterion, epochs, device):
         for data in train_loader:
             data = data.to(device)  
             optimizer.zero_grad()  
-            out = model(data).to(device)
-            loss = criterion(out, data.y).to(device)
+            out = model(data)
+            loss = criterion(out, data.y)
             loss.backward()
             optimizer.step()
 
@@ -370,10 +373,24 @@ def train_gnn(model, train_loader, optimizer, criterion, epochs, device):
             correct += (preds == data.y).sum().item()
             total += data.y.size(0)
 
-        loss_history.append(total_loss / len(train_loader))
-        acc_history.append(100 * correct / total)
+        # Compute epoch loss and accuracy
+        epoch_loss = total_loss / len(train_loader)
+        epoch_acc = 100 * correct / total
+        loss_history.append(epoch_loss)
+        acc_history.append(epoch_acc)
 
-        print(f"Epoch {epoch+1}: Loss = {loss_history[-1]:.4f}, Accuracy = {acc_history[-1]:.2f}%")
+        print(f"Epoch {epoch+1}/{epochs} - Loss: {epoch_loss:.4f}, Accuracy: {epoch_acc:.2f}%")
+
+        # **Early Stopping Check**
+        if epoch_loss < best_loss:
+            best_loss = epoch_loss
+            patience_counter = 0  # Reset patience if loss improves
+        else:
+            patience_counter += 1  # Increase patience counter
+        
+        if patience_counter >= patience:
+            print(f"⏹️ Early stopping triggered at epoch {epoch+1}. Best Loss: {best_loss:.4f}")
+            break  # Stop training early
 
     return acc_history, loss_history
 

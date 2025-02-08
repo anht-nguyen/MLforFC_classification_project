@@ -8,10 +8,10 @@ FC_DATA_PATH = os.path.join(BASE_DIR, "data/connectivity_epoched_data_healthy")
 PSD_DATA_PATH = os.path.join(BASE_DIR, "data/PSD_epoched_data_healthy")
 
 # Number of trials for hyperparameter optimization (Optuna)
-OPTIMIZER_TRIALS = 20
+OPTIMIZER_TRIALS = 5
 
 # Number of folds for cross-validation
-K_FOLDS = 15
+K_FOLDS = 10
 
 # Number of epochs for initial training phase
 NUM_EPOCH_TRAINING = 50
