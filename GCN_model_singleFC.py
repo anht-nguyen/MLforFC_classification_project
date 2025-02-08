@@ -79,9 +79,9 @@ def train_gcn_model(FC_name, full_dataset):
     print(f"🏆 [FC: {FC_name}] Best GCN Hyperparameters: {study.best_params}")
     best_params = study.best_params
 
+    num_layers = best_params["N-GCN"]
     batch_size = best_params["Batch Size"]
     hidden_dim = best_params["GCN-hidden"]
-    num_layers = best_params["N-GCN"]
     drop_edge = best_params["DropEdge"]
     dropout = best_params["Dropout"]
     lr = best_params["Learning Rate"]
@@ -113,10 +113,11 @@ def train_gcn_model(FC_name, full_dataset):
         y_scores_all.extend(y_scores)
 
     final_auc = roc_auc_score(y_true_all, y_scores_all, multi_class="ovr", average="macro")
-    output_data[FC_name]["GCN"] = {"best_params": best_params, "AUC": final_auc}
-    print(f"✅ [FC: {FC_name}] Training Completed. Best AUC: {final_auc:.4f}")
+    fpr, tpr, auc_dict, accuracy, specificity, sensitivity = get_accuracy_measures(y_true_all, y_pred_all, y_scores_all, NUM_CLASSES)
+    output_data[FC_name].update({"GCN": {"best_params": best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity}})
     json_filename = save_to_json(output_data)
     print(f"✅ Results saved: {json_filename}")
+
 
 def main():
     parser = argparse.ArgumentParser(description="Train GCN model with selected FC measure")

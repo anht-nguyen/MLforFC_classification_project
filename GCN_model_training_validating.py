@@ -25,11 +25,14 @@ torch.backends.cudnn.deterministic = False  # Enables non-deterministic algorith
 # Store output results
 output_data = {}
 
-def gcn_objective(trial, full_dataset, num_classes, device):
+import time
+
+def gcn_objective(trial, full_dataset, num_classes, device, FC_name):
     """
     Objective function for Optuna hyperparameter tuning of GCN.
     """
-    print(f"🔍 Running Optuna Trial {trial.number}...")
+    start_time = time.time()
+    print(f"🔍 [FC: {FC_name}] Running Optuna Trial {trial.number}...")
 
     # Hyperparameter search space
     num_layers = trial.suggest_int("N-GCN", 1, 3)
@@ -43,7 +46,7 @@ def gcn_objective(trial, full_dataset, num_classes, device):
     kf = KFold(n_splits=K_FOLDS, shuffle=True, random_state=42)
 
     for fold, (train_idx, test_idx) in enumerate(kf.split(full_dataset)):
-        print(f"📊 Hyperparameter Tuning - Fold {fold+1}/{K_FOLDS}")
+        print(f"📊 [FC: {FC_name}] Hyperparameter Tuning - Trial {trial.number}, Fold {fold+1}/{K_FOLDS}")
 
         # Create training and testing subsets
         train_subset = torch.utils.data.Subset(full_dataset.graphs, train_idx)
@@ -70,6 +73,8 @@ def gcn_objective(trial, full_dataset, num_classes, device):
         fold_auc = roc_auc_score(y_true, y_scores, multi_class="ovr", average="macro")
         auc_scores.append(fold_auc)
 
+    trial_time = time.time() - start_time
+    print(f"✅ [FC: {FC_name}] Completed Trial {trial.number} in {trial_time:.2f} seconds.")
     return np.mean(auc_scores)
 
 
@@ -77,14 +82,15 @@ def train_gcn_model(FC_name, full_dataset):
     """
     Conducts hyperparameter tuning and final training for GCN.
     """
-    print(f"🚀 Starting Training for FC Metric: {FC_name}")
+    print(f"🚀 [FC: {FC_name}] Starting Training...")
+
     output_data[FC_name] = {}
 
     # Perform hyperparameter tuning using Optuna
     study = optuna.create_study(direction="maximize")
-    study.optimize(lambda trial: gcn_objective(trial, full_dataset, NUM_CLASSES, DEVICE), n_trials=OPTIMIZER_TRIALS)
+    study.optimize(lambda trial: gcn_objective(trial, full_dataset, NUM_CLASSES, DEVICE, FC_name), n_trials=OPTIMIZER_TRIALS)
     
-    print("🏆 Best GCN Hyperparameters:", study.best_params)
+    print(f"🏆 [FC: {FC_name}] Best GCN Hyperparameters: {study.best_params}")
     best_params = study.best_params
 
     # Extract best hyperparameters
@@ -99,7 +105,7 @@ def train_gcn_model(FC_name, full_dataset):
     y_true_all, y_pred_all, y_scores_all = [], [], []
 
     for fold, (train_idx, test_idx) in enumerate(kf.split(full_dataset)):
-        print(f"📊 Final Training - Fold {fold+1}/{K_FOLDS}")
+        print(f"📊 [FC: {FC_name}] Final Training - Fold {fold+1}/{K_FOLDS}")
 
         # Train-test split
         train_subset = torch.utils.data.Subset(full_dataset.graphs, train_idx)
@@ -118,7 +124,8 @@ def train_gcn_model(FC_name, full_dataset):
         optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-4)
         criterion = torch.nn.CrossEntropyLoss()
 
-        train_gnn(model, train_loader, optimizer, criterion, NUM_EPOCH_FINAL, DEVICE)
+        print(f"🚀 [FC: {FC_name}] Training Final Model with Best Hyperparameters...")
+        train_gnn(model, train_loader, optimizer, criterion, NUM_EPOCH_FINAL, DEVICE, patience=15)
         y_true, y_pred, y_scores = evaluate_gnn(model, test_loader, DEVICE)
 
         y_true_all.extend(y_true)
@@ -141,6 +148,10 @@ def train_gcn_model(FC_name, full_dataset):
         }
     })
 
+    print(f"✅ [FC: {FC_name}] Training Completed. Best AUC: {final_auc:.4f}")
+
+
+
 
 def main():
     """
@@ -154,7 +165,10 @@ def main():
 
     FC_dataset, PSD_dataset = load_datasets()
 
-    for FC_name in os.listdir(FC_DATA_PATH):
+    total_FC = len(os.listdir(FC_DATA_PATH))
+    for idx, FC_name in enumerate(os.listdir(FC_DATA_PATH), start=1):
+        print(f"📢 Progress: {idx}/{total_FC} - Processing FC: {FC_name}")
+
         basepath = os.path.join(FC_DATA_PATH, FC_name)
         dataset = get_files_by_class(basepath)
         splits = split_datasets(dataset)
@@ -166,8 +180,9 @@ def main():
 
     # Save results to JSON
     json_filename = save_to_json(output_data)
-    print(f"✅ Results saved: {json_filename}")
+    print(f"✅ Training Completed. Results saved: {json_filename}")
 
 
 if __name__ == "__main__":
     main()
+
