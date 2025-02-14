@@ -1,0 +1,15 @@
+{
+    "COH": {
+        "GCN": {
+            "best_params": {
+                "N-GCN": 3,
+                "GCN-hidden": 64,
+                "DropEdge": 0.4,
+                "Dropout": 0.1,
+                "Learning Rate": 0.001,
+                "Batch Size": 32
+            },
+            "AUC": 0.9836178971829751
+        }
+    }
+}
