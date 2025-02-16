@@ -44,6 +44,8 @@ The project includes the following models and techniques:
 - **PLV**: Phase Locking Value
 - **Spectral Granger**: Spectral Granger Causality
 
+Classes in the dataset: baseline, human-left, human-right, robot-left, robot-right, and landscape
+
 ## Scripts
 
 - `GCN_model_singleFC.py`: Script for training and validating a Graph Convolutional Network (GCN) model on single functional connectivity data.
