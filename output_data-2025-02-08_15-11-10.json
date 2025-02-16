@@ -1,0 +1,15 @@
+{
+    "PLV": {
+        "GCN": {
+            "best_params": {
+                "N-GCN": 2,
+                "GCN-hidden": 128,
+                "DropEdge": 0.4,
+                "Dropout": 0.2,
+                "Learning Rate": 0.005,
+                "Batch Size": 16
+            },
+            "AUC": 0.8968058934328947
+        }
+    }
+}

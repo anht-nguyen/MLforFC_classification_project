@@ -1,0 +1,15 @@
+{
+    "iCOH": {
+        "GCN": {
+            "best_params": {
+                "N-GCN": 2,
+                "GCN-hidden": 64,
+                "DropEdge": 0.30000000000000004,
+                "Dropout": 0.5,
+                "Learning Rate": 0.001,
+                "Batch Size": 8
+            },
+            "AUC": 0.9706333128852287
+        }
+    }
+}
