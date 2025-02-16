@@ -65,6 +65,14 @@ To install the required packages, run:
 ```sh
 pip install -r requirements.txt
 ``` 
+## Additional Installation
+
+To install additional packages required for LaTeX support, run:
+
+```sh
+sudo apt update
+sudo apt install -y texlive texlive-latex-extra texlive-fonts-recommended dvipng cm-super
+```
 
 ## Usage
 
