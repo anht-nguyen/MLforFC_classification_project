@@ -1,4 +1,5 @@
 import json
+import os
 import numpy as np
 from datetime import datetime
 
@@ -33,8 +34,12 @@ def save_to_json(output_data, filename_prefix="output_data"):
     # Convert the data
     data_serializable = convert_numpy(output_data)
 
+    # Create the output directory if it doesn't exist
+    output_dir = "output_data"
+    os.makedirs(output_dir, exist_ok=True)
+
     # Generate filename with timestamp
-    filename = f"{filename_prefix}-{current_time_str}.json"
+    filename = os.path.join(output_dir, f"{filename_prefix}-{current_time_str}.json")
 
     # Save to JSON
     with open(filename, "w") as f:
