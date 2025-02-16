@@ -3,12 +3,13 @@ import os
 import numpy as np
 from datetime import datetime
 
-def save_to_json(output_data, filename_prefix="output_data"):
+def save_to_json(output_data, classifier_name, filename_prefix="output_data"):
     """
     Converts NumPy arrays and unsupported data types in a dictionary and saves the data as a JSON file.
 
     Args:
         output_data (dict or list): The data to be saved.
+        classifier_name (str): The name of the classifier.
         filename_prefix (str): The prefix for the output JSON file (default: "output_data").
     
     Returns:
@@ -38,8 +39,8 @@ def save_to_json(output_data, filename_prefix="output_data"):
     output_dir = "output_data"
     os.makedirs(output_dir, exist_ok=True)
 
-    # Generate filename with timestamp
-    filename = os.path.join(output_dir, f"{filename_prefix}-{current_time_str}.json")
+    # Generate filename with timestamp and classifier name
+    filename = os.path.join(output_dir, f"{filename_prefix}-{classifier_name}-{current_time_str}.json")
 
     # Save to JSON
     with open(filename, "w") as f:

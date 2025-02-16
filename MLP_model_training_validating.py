@@ -154,7 +154,7 @@ def main():
         train_mlp_model(FC_name, full_dataset)
 
     # Save results to JSON
-    json_filename = save_to_json(output_data)
+    json_filename = save_to_json(output_data, "MLP")
     print(f"✅ Results saved: {json_filename}")
 
 

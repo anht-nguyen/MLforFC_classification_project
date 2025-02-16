@@ -179,7 +179,7 @@ def main():
         train_gcn_model(FC_name, full_dataset)
 
     # Save results to JSON
-    json_filename = save_to_json(output_data)
+    json_filename = save_to_json(output_data, "GCN")
     print(f"✅ Training Completed. Results saved: {json_filename}")
 
 

@@ -159,7 +159,7 @@ def main():
         train_cnn_model(FC_name, full_dataset)
 
     # Save results to JSON
-    json_filename = save_to_json(output_data)
+    json_filename = save_to_json(output_data, "CNN")
     print(f"✅ Results saved: {json_filename}")
 
 

@@ -115,7 +115,7 @@ def train_gcn_model(FC_name, full_dataset):
     final_auc = roc_auc_score(y_true_all, y_scores_all, multi_class="ovr", average="macro")
     fpr, tpr, auc_dict, accuracy, specificity, sensitivity = get_accuracy_measures(y_true_all, y_pred_all, y_scores_all, NUM_CLASSES)
     output_data[FC_name].update({"GCN": {"best_params": best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity}})
-    json_filename = save_to_json(output_data)
+    json_filename = save_to_json(output_data, f"GCN_{FC_name}")
     print(f"✅ Results saved: {json_filename}")
 
 

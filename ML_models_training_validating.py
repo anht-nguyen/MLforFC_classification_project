@@ -91,5 +91,5 @@ for FC_name in os.listdir(FC_DATA_PATH):
         output_data[FC_name].update({classifier_name: {"best_params":best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity}})
 
 # Save results
-json_filename = save_to_json(output_data)
+json_filename = save_to_json(output_data, "ML_models")
 print("Saved file:", json_filename)
