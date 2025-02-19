@@ -1,0 +1,1 @@
+If the dataset .zip file is not structured as in the current `connectivity_data_by_action.zip`, and is structured as in `connectivity_data_by_action_archive.zip` instead, run `restructure_dataset_FC.py`
