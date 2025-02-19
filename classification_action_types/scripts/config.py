@@ -4,8 +4,10 @@ import torch
 
 # ✅ Paths to dataset directories
 BASE_DIR = os.getcwd()
-FC_DATA_PATH = os.path.join(BASE_DIR, "data/connectivity_epoched_data_healthy")
-PSD_DATA_PATH = os.path.join(BASE_DIR, "data/PSD_epoched_data_healthy")
+FC_DATASET_ZIP_FILENAME = "connectivity_data_by_action"
+PSD_DATASET_ZIP_FILENAME = "PSD_epoched_data_healthy"
+FC_DATA_PATH = os.path.join(BASE_DIR, "data/", FC_DATASET_ZIP_FILENAME)
+PSD_DATA_PATH = os.path.join(BASE_DIR, "data/", PSD_DATASET_ZIP_FILENAME) # update later
 
 # Number of trials for hyperparameter optimization (Optuna)
 OPTIMIZER_TRIALS = 20
@@ -22,8 +24,13 @@ NUM_EPOCH_FINAL = 100
 # Number of times to repeat cross-validation
 NUM_REPEATS = 5
 
-# Number of classes in the dataset: baseline, human-left, human-right, robot-left, robot-right, and landscape
-NUM_CLASSES = 6 
+# Number of classes in the dataset: 5 actions
+# 0 | air punching
+# 1 | forward-backward swing
+# 2 | medial-lateral swing
+# 3 | overhead arm raise
+# 4 | waving
+NUM_CLASSES = 5
 
 # Number of frequencies in the PSD data
 NUM_FREQS = 27

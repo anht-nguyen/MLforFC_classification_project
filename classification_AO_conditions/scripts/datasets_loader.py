@@ -19,8 +19,8 @@ if not os.path.exists(data_folder):
         for file_name in os.listdir(dataset_zip_folder):
             if file_name.endswith('.zip'):
                 zip_file_path = os.path.join(dataset_zip_folder, file_name)
-                shutil.move(zip_file_path, data_folder)
-                print(f"📦 Moved zip file: {zip_file_path} to {data_folder}")
+                shutil.copy(zip_file_path, data_folder)
+                print(f"📦 Copied zip file: {zip_file_path} to {data_folder}")
 
                 # Unzip the file
                 with zipfile.ZipFile(os.path.join(data_folder, file_name), 'r') as zip_ref:
