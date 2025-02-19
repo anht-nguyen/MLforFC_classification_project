@@ -85,12 +85,30 @@ class MLPClassifier(nn.Module):
         return x
 
 
-# ✅ Model Training Function
-def train_model(model, model_name, epochs, criterion, optimizer, train_loader, device):
-    """Trains the CNN or MLP model."""
+# ✅ Model Training Function with Early Stopping
+def train_model(model, model_name, epochs, criterion, optimizer, train_loader, device, patience=15):
+    """
+    Trains the CNN or MLP model with early stopping.
+
+    Args:
+        model: The model to train.
+        model_name: Name of the model.
+        epochs: Maximum number of epochs.
+        criterion: Loss function.
+        optimizer: Optimizer.
+        train_loader: DataLoader for training data.
+        device: CPU/GPU.
+        patience: Number of epochs to wait before stopping if no improvement.
+
+    Returns:
+        accuracy_history: List of accuracy values per epoch.
+        loss_history: List of loss values per epoch.
+    """
     print(f"Training {model_name} model...")
     accuracy_history = []
     loss_history = []
+    best_loss = float("inf")  # Initialize best validation loss
+    patience_counter = 0  # Tracks epochs without improvement
 
     model.to(device)
     model.train()
@@ -128,9 +146,18 @@ def train_model(model, model_name, epochs, criterion, optimizer, train_loader, d
 
         print(f"Epoch {epoch+1}/{epochs} - Loss: {epoch_loss:.4f}, Accuracy: {epoch_accuracy:.2f}%")
 
+        # **Early Stopping Check**
+        if epoch_loss < best_loss:
+            best_loss = epoch_loss
+            patience_counter = 0  # Reset patience if loss improves
+        else:
+            patience_counter += 1  # Increase patience counter
+        
+        if patience_counter >= patience:
+            print(f"⏹️ Early stopping triggered at epoch {epoch+1}. Best Loss: {best_loss:.4f}")
+            break  # Stop training early
+
     return accuracy_history, loss_history
-
-
 
 
 # ✅ Model Evaluation Function
