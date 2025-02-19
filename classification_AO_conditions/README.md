@@ -67,6 +67,16 @@ To install the required packages, run:
 ```sh
 pip install -r requirements.txt
 ``` 
+
+To log the necessary packages, install `pipreqs`:
+```
+pip install pipreqs
+```
+Generate a Minimal `requirements.txt`:
+``` 
+pipreqs . --force
+```
+
 ## Additional Installation
 
 To install additional packages required for LaTeX support, run:
