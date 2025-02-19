@@ -81,14 +81,25 @@ pipreqs . --force
 
 To install additional packages required for LaTeX support, run:
 
-```sh
+```
 sudo apt update
 sudo apt install -y texlive texlive-latex-extra texlive-fonts-recommended dvipng cm-super
 ```
+
+Additional Latex installation:
+```
+tlmgr install underscore tex-gyre cm-super type1cm ec
+tlmgr update --self --all
+``` 
 
 ## Usage
 
 To run the GCN model training and validation, use the following command:
 ```
 ./autorun_GCN_model_singleFC.zsh <session_name>
+```
+
+If running via ssh: Move ouput_data JSON files to local machine:
+```
+scp hienbui@158.130.72.141:~/Documents/Projects/MLforFC_classification_project/classification_action_types/output_data/* /home/anhtn/Documents/
 ```

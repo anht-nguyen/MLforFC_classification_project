@@ -34,7 +34,7 @@ tmux send-keys "python3 CNN_model_singleFC.py --FC_name PLV && python3 CNN_model
 
 # In the fourth pane, run 'python3 CNN_model_singleFC.py --FC_name iCOH'
 tmux select-pane -t 3
-tmux send-keys "python3 CNN_model_singleFC.py --FC_name iCOH" C-m
+tmux send-keys "python3 CNN_model_singleFC.py --FC_name 'Spectral Granger'" C-m
 
 # Attach to the tmux session
 tmux attach-session -t $SESSION_NAME
