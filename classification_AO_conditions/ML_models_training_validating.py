@@ -23,6 +23,7 @@ load_datasets()
 
 # Process each functional connectivity metric
 for FC_name in os.listdir(FC_DATA_PATH):
+    output_data[FC_name] = {}
     print("************************")
     print("FC metric: " + str(FC_name))
     basepath = os.path.join(FC_DATA_PATH, FC_name)
