@@ -52,7 +52,7 @@ for FC_name in os.listdir(FC_DATA_PATH):
         best_models[classifier_name] = study.best_params
         print(f"Best hyperparameters for {classifier_name}: {study.best_params}")
 
-    # Evaluate best models with cross-validation
+    # Evaluate best models with cross-validation and early stopping
     for classifier_name, best_params in best_models.items():
         print(f"Final model training for {classifier_name}...")
 
@@ -65,6 +65,10 @@ for FC_name in os.listdir(FC_DATA_PATH):
 
         cv = RepeatedStratifiedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS, random_state=42)
         y_true_all, y_pred_all, y_scores_all = [], [], []
+
+        best_loss = float("inf")  # Initialize best validation loss
+        patience_counter = 0  # Tracks epochs without improvement
+        patience = 15  # Number of epochs to wait before stopping if no improvement
 
         for fold, (train_idx, test_idx) in enumerate(cv.split(full_x, full_y)):
             print(f"Final Model Training - Fold {fold+1}/{cv.get_n_splits()}")
@@ -79,6 +83,20 @@ for FC_name in os.listdir(FC_DATA_PATH):
             y_true_all.extend(y_test)
             y_pred_all.extend(y_pred)
             y_scores_all.extend(y_scores)
+
+            # Calculate loss for early stopping
+            fold_loss = 1 - accuracy_score(y_test, y_pred)
+
+            # Early stopping check
+            if fold_loss < best_loss:
+                best_loss = fold_loss
+                patience_counter = 0  # Reset patience if loss improves
+            else:
+                patience_counter += 1  # Increase patience counter
+
+            if patience_counter >= patience:
+                print(f"⏹️ Early stopping triggered at fold {fold+1}. Best Loss: {best_loss:.4f}")
+                break  # Stop training early
 
         final_accuracy = accuracy_score(y_true_all, y_pred_all)
         final_auc = roc_auc_score(np.array(y_true_all), np.array(y_scores_all), multi_class="ovr", average="macro")
