@@ -188,31 +188,42 @@ def plot_mean_roc_model(data, script_dir):
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
-    model_names = ["GCN", "CNN", "MLP"]
+    model_names = ["GCN", "CNN", "MLP", "SK"]
 
     for model in model_names:
-        merged_data = {}
-        for root, dirs, files in os.walk(script_dir):
-            for file in files:
-                if file.endswith(".json") and 'output_data-'+ model in file:
-                    print(file)
-                    with open(os.path.join(root, file), "r") as f:
-                        loaded_data = json.load(f)
-                        key = os.path.basename(file).split("-"+model+"_")[1].split("-")[0]  # Extract FC type (COH, iCOH, PDC, PLV)
-                        merged_data[key] = loaded_data[model]  # Store under the extracted key
-        output_file_path = os.path.join(script_dir, f"output_data-merged-{model}.json")
+        if model == "SK":
+            # Iterate through files in the directory
+            for root, dirs, files in os.walk(script_dir):
+                if "output_data-ML_models" in files and files.endswith(".json"):
+                    old_path = os.path.join(root, files)
+                    new_path = os.path.join(root, "output_data-merged-SK.json")
+                    
+                    # Rename the file
+                    os.rename(old_path, new_path)
+                    print(f"Renamed: {files} -> output_data-merged-SK.json")
+        else:        
+            merged_data = {}
+            for root, dirs, files in os.walk(script_dir):
+                for file in files:
+                    if file.endswith(".json") and 'output_data-'+ model in file:
+                        print(file)
+                        with open(os.path.join(root, file), "r") as f:
+                            loaded_data = json.load(f)
+                            key = os.path.basename(file).split("-"+model+"_")[1].split("-")[0]  # Extract FC type (COH, iCOH, PDC, PLV)
+                            merged_data[key] = loaded_data[model]  # Store under the extracted key
+            output_file_path = os.path.join(script_dir, f"output_data-merged-{model}.json")
 
-        # Save merged data
-        with open(output_file_path, "w") as output_file:
-            json.dump(merged_data, output_file, indent=4)
+            # Save merged data
+            with open(output_file_path, "w") as output_file:
+                json.dump(merged_data, output_file, indent=4)
 
-        print(f"Merged JSON saved as: {output_file_path}")
+            print(f"Merged JSON saved as: {output_file_path}")
                         
-
+    
 
     merged_json_files = [
         # "output_data-merged-GCN.json",
-        "output_data-merged-CNN.json",
+        # "output_data-merged-CNN.json",
         # "output_data-merged-MLP.json",
         "output_data-merged-SK.json"
     ]
