@@ -11,7 +11,7 @@ from sklearn.model_selection import KFold, RepeatedStratifiedKFold, RepeatedKFol
 from scripts.datasets_loader import load_datasets
 from scripts.utils import get_files_by_class, split_datasets, get_accuracy_measures, get_accuracy_measures_errors
 from scripts.config import (
-    FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES, DEVICE, NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL
+    FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES, DEVICE, NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL, PATIENCE
 )
 from scripts.save_results import save_to_json
 from scripts.models.dl_models_cores import train_model, evaluate_model, CNNClassifier
@@ -50,7 +50,7 @@ def cnn_objective(trial, full_dataset, num_classes, device, FC_name):
         optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-4)
         criterion = torch.nn.CrossEntropyLoss()
 
-        train_model(model, "CNN", NUM_EPOCH_TRAINING, criterion, optimizer, train_loader, device)
+        train_model(model, "CNN", NUM_EPOCH_TRAINING, criterion, optimizer, train_loader, device, PATIENCE, FC_name, trial.number)
         y_true, y_pred, y_scores = evaluate_model(model, test_loader, device)
 
         fold_auc = roc_auc_score(y_true, y_scores, multi_class="ovr", average="macro")
@@ -63,7 +63,7 @@ def train_cnn_model(FC_name, full_dataset):
     print(f"🚀 [FC: {FC_name}] Starting Training...")
     
     study = optuna.create_study(direction="maximize")
-    study.optimize(lambda trial: cnn_objective(trial, full_dataset, NUM_CLASSES, DEVICE, FC_name), n_trials=OPTIMIZER_TRIALS)
+    study.optimize(lambda trial: cnn_objective(trial, full_dataset, NUM_CLASSES, DEVICE, PATIENCE, FC_name), n_trials=OPTIMIZER_TRIALS)
     
     print(f"🏆 [FC: {FC_name}] Best CNN Hyperparameters: {study.best_params}")
     best_params = study.best_params
@@ -94,7 +94,7 @@ def train_cnn_model(FC_name, full_dataset):
         optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-4)
         criterion = torch.nn.CrossEntropyLoss()
 
-        train_model(model, "CNN", NUM_EPOCH_FINAL, criterion, optimizer, train_loader, DEVICE)
+        train_model(model, "CNN", NUM_EPOCH_FINAL, criterion, optimizer, train_loader, DEVICE, PATIENCE, FC_name)
         y_true, y_pred, y_scores = evaluate_model(model, test_loader, DEVICE)
 
         y_true_all.extend(y_true)

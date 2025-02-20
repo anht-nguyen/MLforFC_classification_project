@@ -12,7 +12,7 @@ from torch_geometric.loader import DataLoader
 from scripts.datasets_loader import load_datasets
 from scripts.utils import get_files_by_class, split_datasets, get_accuracy_measures, get_accuracy_measures_errors
 from scripts.config import (
-    FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES, DEVICE, NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL, NUM_FREQS
+    FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES, DEVICE, NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL, NUM_FREQS, PATIENCE
 )
 from scripts.save_results import save_to_json
 from scripts.models.dl_models_cores import train_gnn, evaluate_gnn, GCN, GraphDataset
@@ -57,7 +57,7 @@ def gcn_objective(trial, full_dataset, num_classes, device, FC_name):
         optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-4)
         criterion = torch.nn.CrossEntropyLoss()
 
-        train_gnn(model, train_loader, optimizer, criterion, NUM_EPOCH_TRAINING, device)
+        train_gnn(model, train_loader, optimizer, criterion, NUM_EPOCH_TRAINING, device, PATIENCE, FC_name, trial.number)
         y_true, y_pred, y_scores = evaluate_gnn(model, test_loader, device)
 
         fold_auc = roc_auc_score(y_true, y_scores, multi_class="ovr", average="macro")
@@ -105,7 +105,7 @@ def train_gcn_model(FC_name, full_dataset):
         optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-4)
         criterion = torch.nn.CrossEntropyLoss()
 
-        train_gnn(model, train_loader, optimizer, criterion, NUM_EPOCH_FINAL, DEVICE)
+        train_gnn(model, train_loader, optimizer, criterion, NUM_EPOCH_FINAL, DEVICE, PATIENCE, FC_name)
         y_true, y_pred, y_scores = evaluate_gnn(model, test_loader, DEVICE)
 
         y_true_all.extend(y_true)

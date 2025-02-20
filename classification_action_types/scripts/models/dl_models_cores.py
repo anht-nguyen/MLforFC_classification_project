@@ -86,7 +86,7 @@ class MLPClassifier(nn.Module):
 
 
 # ✅ Model Training Function with Early Stopping
-def train_model(model, model_name, epochs, criterion, optimizer, train_loader, device, patience=PATIENCE):
+def train_model(model, model_name, epochs, criterion, optimizer, train_loader, device, patience, FC_name, trial_num=0):
     """
     Trains the CNN or MLP model with early stopping.
 
@@ -104,7 +104,7 @@ def train_model(model, model_name, epochs, criterion, optimizer, train_loader, d
         accuracy_history: List of accuracy values per epoch.
         loss_history: List of loss values per epoch.
     """
-    print(f"Training {model_name} model...")
+    print(f"Training {model_name} model, {FC_name} measure...")
     accuracy_history = []
     loss_history = []
     best_loss = float("inf")  # Initialize best validation loss
@@ -144,7 +144,7 @@ def train_model(model, model_name, epochs, criterion, optimizer, train_loader, d
         accuracy_history.append(epoch_accuracy)
         loss_history.append(epoch_loss)
 
-        print(f"Epoch {epoch+1}/{epochs} - Loss: {epoch_loss:.4f}, Accuracy: {epoch_accuracy:.2f}%")
+        print(f"{model_name}-{FC_name}-Trial_{trial_num} - Epoch {epoch+1}/{epochs} - Loss: {epoch_loss:.4f}, Accuracy: {epoch_accuracy:.2f}%")
 
         # **Early Stopping Check**
         if epoch_loss < best_loss:
@@ -358,7 +358,7 @@ class GCN(nn.Module):
         return edge_index
 
 
-def train_gnn(model, train_loader, optimizer, criterion, epochs, device, patience=15):
+def train_gnn(model, train_loader, optimizer, criterion, epochs, device, patience, FC_name, trial_num=0):
     """
     Trains the GCN model with early stopping.
 
@@ -406,7 +406,7 @@ def train_gnn(model, train_loader, optimizer, criterion, epochs, device, patienc
         loss_history.append(epoch_loss)
         acc_history.append(epoch_acc)
 
-        print(f"Epoch {epoch+1}/{epochs} - Loss: {epoch_loss:.4f}, Accuracy: {epoch_acc:.2f}%")
+        print(f"GNN-{FC_name}-Trial_{trial_num} - Epoch {epoch+1}/{epochs} - Loss: {epoch_loss:.4f}, Accuracy: {epoch_acc:.2f}%")
 
         # **Early Stopping Check**
         if epoch_loss < best_loss:

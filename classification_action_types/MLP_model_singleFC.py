@@ -11,7 +11,7 @@ from sklearn.model_selection import KFold, RepeatedStratifiedKFold, RepeatedKFol
 from scripts.datasets_loader import load_datasets
 from scripts.utils import get_files_by_class, split_datasets, get_accuracy_measures, get_accuracy_measures_errors
 from scripts.config import (
-    FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES, DEVICE, NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL, NUM_CHANNELS
+    FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES, DEVICE, NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL, NUM_CHANNELS, PATIENCE
 )
 from scripts.save_results import save_to_json
 from scripts.models.dl_models_cores import train_model, evaluate_model, MLPClassifier
@@ -45,7 +45,7 @@ def mlp_objective(trial, full_dataset, num_classes, device, FC_name):
         optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-4)
         criterion = torch.nn.CrossEntropyLoss()
         
-        train_model(model, "MLP", NUM_EPOCH_TRAINING, criterion, optimizer, train_loader, device)
+        train_model(model, "MLP", NUM_EPOCH_TRAINING, criterion, optimizer, train_loader, device, PATIENCE, FC_name, trial.number)
         y_true, y_pred, y_scores = evaluate_model(model, test_loader, device)
         
         fold_auc = roc_auc_score(y_true, y_scores, multi_class="ovr", average="macro")
@@ -85,7 +85,7 @@ def train_mlp_model(FC_name, full_dataset):
         optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-4)
         criterion = torch.nn.CrossEntropyLoss()
         
-        train_model(model, "MLP", NUM_EPOCH_FINAL, criterion, optimizer, train_loader, DEVICE)
+        train_model(model, "MLP", NUM_EPOCH_FINAL, criterion, optimizer, train_loader, DEVICE, PATIENCE, FC_name)
         y_true, y_pred, y_scores = evaluate_model(model, test_loader, DEVICE)
         
         y_true_all.extend(y_true)

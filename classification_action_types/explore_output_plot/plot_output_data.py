@@ -214,12 +214,7 @@ def main():
                         with open(os.path.join(root, file), "r") as f:
                             loaded_data = json.load(f)
                             key = os.path.basename(file).split("-"+model+"_")[1].split("-")[0]  # Extract FC type (COH, iCOH, PDC, PLV)
-                            if model == "GCN":
-                                merged_data[key] = loaded_data[key]
-                            else:
-                                merged_data[key] = loaded_data  # Store under the extracted key
-                            
-                            
+                            merged_data[key] = loaded_data  # Store under the extracted key
             output_file_path = os.path.join(script_dir, f"output_data-merged-{model}.json")
 
             # Save merged data
@@ -231,7 +226,7 @@ def main():
     
 
     merged_json_files = [
-        "output_data-merged-GCN.json",
+        # "output_data-merged-GCN.json",
         "output_data-merged-CNN.json",
         "output_data-merged-MLP.json",
         "output_data-merged-SK.json"
