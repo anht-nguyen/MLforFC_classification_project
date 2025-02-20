@@ -7,6 +7,7 @@ from sklearn.metrics import accuracy_score, roc_auc_score, confusion_matrix
 from sklearn.svm import SVC
 import numpy as np
 import torch
+from scripts.config import FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES
 
 class MatlabDataset(Dataset):
     """Handles loading MATLAB files into PyTorch Datasets"""
@@ -53,7 +54,7 @@ def objective_rfc(trial, train_x, train_y):
 
 def cross_validate_model(classifier, train_x, train_y):
     """Performs cross-validation and returns AUC score."""
-    cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=42)
+    cv = RepeatedStratifiedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS_TRAINING, random_state=42)
     auc_scores = []
     for train_idx, test_idx in cv.split(train_x, train_y):
         X_train, X_test = train_x[train_idx], train_x[test_idx]

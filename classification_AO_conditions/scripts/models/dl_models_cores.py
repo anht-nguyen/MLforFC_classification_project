@@ -8,7 +8,7 @@ from torch_geometric.data import Data
 from torch.utils.data import Dataset
 from scipy.io import loadmat
 
-from scripts.config import NUM_CHANNELS
+from scripts.config import NUM_CHANNELS, PATIENCE
 
 # ✅ CNN Model Definition
 class CNNClassifier(nn.Module):
@@ -86,7 +86,7 @@ class MLPClassifier(nn.Module):
 
 
 # ✅ Model Training Function with Early Stopping
-def train_model(model, model_name, epochs, criterion, optimizer, train_loader, device, patience=15):
+def train_model(model, model_name, epochs, criterion, optimizer, train_loader, device, patience=PATIENCE):
     """
     Trains the CNN or MLP model with early stopping.
 

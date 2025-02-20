@@ -14,13 +14,17 @@ OPTIMIZER_TRIALS = 20
 K_FOLDS = 15
 
 # Number of epochs for initial training phase
-NUM_EPOCH_TRAINING = 50
+NUM_EPOCH_TRAINING = 300
 
 # Number of epochs for final training phase
-NUM_EPOCH_FINAL = 100
+NUM_EPOCH_FINAL = 300
+
+# Number of epochs for early stopping
+PATIENCE = 15
 
 # Number of times to repeat cross-validation
-NUM_REPEATS = 5
+NUM_REPEATS_TRAINING = 5
+NUM_REPEATS_FINAL = 50
 
 # Number of classes in the dataset: baseline, human-left, human-right, robot-left, robot-right, and landscape
 NUM_CLASSES = 6 

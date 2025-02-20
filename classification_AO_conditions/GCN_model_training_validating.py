@@ -12,7 +12,7 @@ from scripts.datasets_loader import load_datasets
 from scripts.utils import get_files_by_class, split_datasets, get_accuracy_measures
 from scripts.config import (
     FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_CLASSES, DEVICE,
-    NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL, NUM_FREQS
+    NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL, NUM_FREQS, PATIENCE
 )
 from scripts.save_results import save_to_json
 from scripts.models.dl_models_cores import train_gnn, evaluate_gnn, GCN, GraphDataset
@@ -125,7 +125,7 @@ def train_gcn_model(FC_name, full_dataset):
         criterion = torch.nn.CrossEntropyLoss()
 
         print(f"🚀 [FC: {FC_name}] Training Final Model with Best Hyperparameters...")
-        train_gnn(model, train_loader, optimizer, criterion, NUM_EPOCH_FINAL, DEVICE, patience=15)
+        train_gnn(model, train_loader, optimizer, criterion, NUM_EPOCH_FINAL, DEVICE, patience=PATIENCE)
         y_true, y_pred, y_scores = evaluate_gnn(model, test_loader, DEVICE)
 
         y_true_all.extend(y_true)

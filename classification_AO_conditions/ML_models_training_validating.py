@@ -11,7 +11,7 @@ from functools import partial
 
 from scripts.datasets_loader import load_datasets, FC_dataset
 from scripts.utils import get_files_by_class, split_datasets, flatten_transform, dataset_type_converter, get_accuracy_measures 
-from scripts.config import FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS, NUM_CLASSES
+from scripts.config import FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES, PATIENCE
 from scripts.save_results import save_to_json
 from scripts.models.ml_models_cores import objective_svc, objective_logreg, objective_rfc, MatlabDataset
 
@@ -63,12 +63,12 @@ for FC_name in os.listdir(FC_DATA_PATH):
         else:
             best_model = RandomForestClassifier(n_estimators=best_params["rfc_n_estimators"], max_depth=best_params["rfc_max_depth"])
 
-        cv = RepeatedStratifiedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS, random_state=42)
+        cv = RepeatedStratifiedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS_FINAL, random_state=42)
         y_true_all, y_pred_all, y_scores_all = [], [], []
 
         best_loss = float("inf")  # Initialize best validation loss
         patience_counter = 0  # Tracks epochs without improvement
-        patience = 15  # Number of epochs to wait before stopping if no improvement
+        patience = PATIENCE  # Number of epochs to wait before stopping if no improvement
 
         for fold, (train_idx, test_idx) in enumerate(cv.split(full_x, full_y)):
             print(f"Final Model Training - Fold {fold+1}/{cv.get_n_splits()}")

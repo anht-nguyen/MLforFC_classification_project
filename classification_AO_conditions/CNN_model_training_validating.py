@@ -3,7 +3,7 @@ import optuna
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score
-from sklearn.model_selection import KFold
+from sklearn.model_selection import KFold, RepeatedStratifiedKFold
 import torch
 from torch.optim import Adam
 from torch_geometric.loader import DataLoader
@@ -12,8 +12,7 @@ from torch.utils.data import Dataset
 from scripts.datasets_loader import load_datasets, FC_dataset
 from scripts.utils import get_files_by_class, split_datasets, dataset_type_converter, get_accuracy_measures
 from scripts.config import (
-    FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS, NUM_CLASSES, DEVICE,
-    NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL
+    FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES, DEVICE, NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL
 )
 from scripts.save_results import save_to_json
 from scripts.models.dl_models_cores import train_model, evaluate_model, CNNClassifier
@@ -37,7 +36,7 @@ def cnn_objective(trial, full_dataset, num_classes, device):
     batch_size = trial.suggest_categorical("Batch Size", [8, 16, 32])
 
     auc_scores = []
-    kf = KFold(n_splits=K_FOLDS, shuffle=True, random_state=42)
+    kf = RepeatedStratifiedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS_TRAINING, random_state=42)
 
     for fold, (train_idx, test_idx) in enumerate(kf.split(full_dataset)):
         print(f"🔍 Optuna Tuning - Fold {fold+1}/{K_FOLDS}")
@@ -89,7 +88,7 @@ def train_cnn_model(FC_name, full_dataset):
     padding = best_params["Padding"]
     lr = best_params["Learning Rate"]
 
-    kf = KFold(n_splits=K_FOLDS, shuffle=True, random_state=42)
+    kf = RepeatedStratifiedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS_FINAL, random_state=42)
     y_true_all, y_pred_all, y_scores_all = [], [], []
 
     for fold, (train_idx, test_idx) in enumerate(kf.split(full_dataset)):
