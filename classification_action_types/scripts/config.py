@@ -5,7 +5,7 @@ import torch
 # ✅ Paths to dataset directories
 BASE_DIR = os.getcwd()
 FC_DATASET_ZIP_FILENAME = "connectivity_data_by_action"
-PSD_DATASET_ZIP_FILENAME = "PSD_epoched_data_healthy"
+PSD_DATASET_ZIP_FILENAME = "PSD_epoched_data_by_action_types"
 FC_DATA_PATH = os.path.join(BASE_DIR, "data/", FC_DATASET_ZIP_FILENAME)
 PSD_DATA_PATH = os.path.join(BASE_DIR, "data/", PSD_DATASET_ZIP_FILENAME) # update later
 
