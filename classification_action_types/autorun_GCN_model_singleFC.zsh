@@ -26,7 +26,7 @@ tmux send-keys "watch -n 1 nvidia-smi" C-m
 
 # In the second pane, run 'python3 GCN_model_singleFC.py --FC_name COH' then 'python3 GCN_model_singleFC.py --FC_name iCOH'
 tmux select-pane -t 1
-tmux send-keys "python3 GCN_model_singleFC.py --FC_name COH && python3 GCN_model_singleFC.py --FC_name iCOH" C-m
+tmux send-keys "python3 GCN_model_singleFC.py --FC_name COH && python3 GCN_model_singleFC.py --FC_name 'Spectral Granger'" C-m
 
 # In the third pane, run 'python3 GCN_model_singleFC.py --FC_name PLV' then 'python3 GCN_model_singleFC.py --FC_name PDC'
 tmux select-pane -t 2
@@ -34,7 +34,7 @@ tmux send-keys "python3 GCN_model_singleFC.py --FC_name PLV && python3 GCN_model
 
 # In the fourth pane, run 'python3 GCN_model_singleFC.py --FC_name iCOH'
 tmux select-pane -t 3
-tmux send-keys "python3 GCN_model_singleFC.py --FC_name 'Spectral Granger'" C-m
+tmux send-keys "python3 GCN_model_singleFC.py --FC_name iCOH" C-m
 
 # Attach to the tmux session
 tmux attach-session -t $SESSION_NAME
