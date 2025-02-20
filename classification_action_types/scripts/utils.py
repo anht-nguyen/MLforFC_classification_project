@@ -90,6 +90,32 @@ def get_accuracy_measures(y_true, y_pred, y_scores, num_classes): #auc, accuracy
         sensitivity[i] = confusion_matrix(y_true, y_pred)[1, 1] / (confusion_matrix(y_true, y_pred)[1, 0] + confusion_matrix(y_true, y_pred)[1, 1])
     return fpr, tpr, auc_dict, accuracy, specificity, sensitivity
 
+def get_accuracy_measures_errors(y_true_errors, y_pred_errors, y_scores_errors, num_classes): #auc, accuracy, specificity, sensitiviity
+    fpr = {}
+    tpr = {}
+    auc_dict = {}
+    accuracy = {}
+    specificity = {}
+    sensitivity = {}
+    for fold in range(len(y_true_errors)):
+        y_true = y_true_errors[fold]
+        y_pred = y_pred_errors[fold]
+        y_scores = y_scores_errors[fold]
+        fpr[fold] = {}
+        tpr[fold] = {}
+        auc_dict[fold] = {}
+        accuracy[fold] = {}
+        specificity[fold] = {}
+        sensitivity[fold] = {}
+        for i in range(num_classes):
+            fpr[fold][i], tpr[fold][i], _ = roc_curve(np.array(y_true) == i, np.array(y_scores)[:,i])
+            auc_dict[fold][i] = auc(fpr[fold][i], tpr[fold][i])
+            accuracy[fold][i] = accuracy_score(y_true, y_pred)
+            specificity[fold][i] = confusion_matrix(y_true, y_pred)[0, 0] / (confusion_matrix(y_true, y_pred)[0, 0] + confusion_matrix(y_true, y_pred)[0, 1])
+            sensitivity[fold][i] = confusion_matrix(y_true, y_pred)[1, 1] / (confusion_matrix(y_true, y_pred)[1, 0] + confusion_matrix(y_true, y_pred)[1, 1])
+    return auc_dict, accuracy, specificity, sensitivity
+
+
 def feature_map_dim(input_dim, padding, kernel_size, stride):
   return math.floor((((input_dim) - kernel_size + 2*padding)/ stride) + 1)
 

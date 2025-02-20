@@ -4,13 +4,13 @@ import optuna
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score
-from sklearn.model_selection import KFold, RepeatedStratifiedKFold
+from sklearn.model_selection import KFold, RepeatedStratifiedKFold, RepeatedKFold
 import torch
 from torch.optim import Adam
 from torch_geometric.loader import DataLoader
 
 from scripts.datasets_loader import load_datasets
-from scripts.utils import get_files_by_class, split_datasets, get_accuracy_measures
+from scripts.utils import get_files_by_class, split_datasets, get_accuracy_measures, get_accuracy_measures_errors
 from scripts.config import (
     FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES, DEVICE, NUM_EPOCH_TRAINING, NUM_EPOCH_FINAL, NUM_FREQS
 )
@@ -39,7 +39,7 @@ def gcn_objective(trial, full_dataset, num_classes, device, FC_name):
     batch_size = trial.suggest_categorical("Batch Size", [8, 16, 32])
 
     auc_scores = []
-    kf = RepeatedStratifiedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS_TRAINING, random_state=42)
+    kf = RepeatedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS_TRAINING, random_state=42)
 
     for fold, (train_idx, test_idx) in enumerate(kf.split(full_dataset)):
         train_subset = torch.utils.data.Subset(full_dataset.graphs, train_idx)
@@ -85,8 +85,9 @@ def train_gcn_model(FC_name, full_dataset):
     dropout = best_params["Dropout"]
     lr = best_params["Learning Rate"]
 
-    kf = RepeatedStratifiedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS_FINAL, random_state=42)
-    y_true_all, y_pred_all, y_scores_all = [], [], []
+    kf = RepeatedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS_FINAL, random_state=42)
+    
+    y_true_all, y_pred_all, y_scores_all, y_true_all_compute_errors, y_pred_all_compute_errors, y_scores_all_compute_errors = [], [], [], [], [], []
 
     for fold, (train_idx, test_idx) in enumerate(kf.split(full_dataset)):
         train_subset = torch.utils.data.Subset(full_dataset.graphs, train_idx)
@@ -111,9 +112,22 @@ def train_gcn_model(FC_name, full_dataset):
         y_pred_all.extend(y_pred)
         y_scores_all.extend(y_scores)
 
+        y_true_all_compute_errors.append(y_true)
+        y_pred_all_compute_errors.append(y_pred)
+        y_scores_all_compute_errors.append(y_scores)
+
     final_auc = roc_auc_score(y_true_all, y_scores_all, multi_class="ovr", average="macro")
     fpr, tpr, auc_dict, accuracy, specificity, sensitivity = get_accuracy_measures(y_true_all, y_pred_all, y_scores_all, NUM_CLASSES)
-    output_data[FC_name].update({"GCN": {"best_params": best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity}})
+
+    auc_errors, accuracy_errors, specificity_errors, sensitivity_errors = get_accuracy_measures_errors(y_true_all_compute_errors, y_pred_all_compute_errors, y_scores_all_compute_errors, NUM_CLASSES)
+
+
+    output_data[FC_name].update({"GCN": {"best_params": best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity},
+            "AUC_errors": auc_errors,
+            "Acc_errors": accuracy_errors,
+            "Spec_errors": specificity_errors,
+            "Sens_errors": sensitivity_errors})
+
     json_filename = save_to_json(output_data, f"GCN_{FC_name}")
     print(f"✅ Results saved: {json_filename}")
 

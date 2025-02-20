@@ -10,7 +10,7 @@ from sklearn.model_selection import RepeatedStratifiedKFold
 from functools import partial
 
 from scripts.datasets_loader import load_datasets, FC_dataset
-from scripts.utils import get_files_by_class, split_datasets, flatten_transform, dataset_type_converter, get_accuracy_measures 
+from scripts.utils import get_files_by_class, split_datasets, flatten_transform, dataset_type_converter, get_accuracy_measures, get_accuracy_measures_errors 
 from scripts.config import FC_DATA_PATH, OPTIMIZER_TRIALS, K_FOLDS, NUM_REPEATS_TRAINING, NUM_REPEATS_FINAL, NUM_CLASSES, PATIENCE
 from scripts.save_results import save_to_json
 from scripts.models.ml_models_cores import objective_svc, objective_logreg, objective_rfc, MatlabDataset
@@ -64,7 +64,7 @@ for FC_name in os.listdir(FC_DATA_PATH):
             best_model = RandomForestClassifier(n_estimators=best_params["rfc_n_estimators"], max_depth=best_params["rfc_max_depth"])
 
         cv = RepeatedStratifiedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS_FINAL, random_state=42)
-        y_true_all, y_pred_all, y_scores_all = [], [], []
+        y_true_all, y_pred_all, y_scores_all, y_true_all_compute_errors, y_pred_all_compute_errors, y_scores_all_compute_errors = [], [], [], [], [], []
 
         best_loss = float("inf")  # Initialize best validation loss
         patience_counter = 0  # Tracks epochs without improvement
@@ -83,6 +83,10 @@ for FC_name in os.listdir(FC_DATA_PATH):
             y_true_all.extend(y_test)
             y_pred_all.extend(y_pred)
             y_scores_all.extend(y_scores)
+
+            y_true_all_compute_errors.append(y_test)
+            y_pred_all_compute_errors.append(y_pred)
+            y_scores_all_compute_errors.append(y_scores)
 
             # Calculate loss for early stopping
             fold_loss = 1 - accuracy_score(y_test, y_pred)
@@ -107,7 +111,14 @@ for FC_name in os.listdir(FC_DATA_PATH):
         cm_df = pd.DataFrame(confusion_matrix(y_true_all, y_pred_all))
         # plot_confusion_matrix(cm_df, title=f'{classifier_name} Confusion Matrix')
         fpr, tpr, auc_dict, accuracy, specificity, sensitivity =  get_accuracy_measures(y_true_all, y_pred_all, y_scores_all, NUM_CLASSES)
-        output_data[FC_name].update({classifier_name: {"best_params":best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity}})
+
+        auc_errors, accuracy_errors, specificity_errors, sensitivity_errors = get_accuracy_measures_errors(y_true_all_compute_errors, y_pred_all_compute_errors, y_scores_all_compute_errors, NUM_CLASSES)
+
+        output_data[FC_name].update({classifier_name: {"best_params":best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity},
+            "AUC_errors": auc_errors,
+            "Acc_errors": accuracy_errors,
+            "Spec_errors": specificity_errors,
+            "Sens_errors": sensitivity_errors })
 
 # Save results
 json_filename = save_to_json(output_data, "ML_models")
