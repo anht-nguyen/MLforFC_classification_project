@@ -63,7 +63,7 @@ def train_cnn_model(FC_name, full_dataset):
     print(f"🚀 [FC: {FC_name}] Starting Training...")
     
     study = optuna.create_study(direction="maximize")
-    study.optimize(lambda trial: cnn_objective(trial, full_dataset, NUM_CLASSES, DEVICE, PATIENCE, FC_name), n_trials=OPTIMIZER_TRIALS)
+    study.optimize(lambda trial: cnn_objective(trial, full_dataset, NUM_CLASSES, DEVICE, FC_name), n_trials=OPTIMIZER_TRIALS)
     
     print(f"🏆 [FC: {FC_name}] Best CNN Hyperparameters: {study.best_params}")
     best_params = study.best_params
