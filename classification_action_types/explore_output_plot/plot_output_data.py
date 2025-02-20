@@ -87,9 +87,13 @@ def load_json_files(json_files, script_dir):
         for FC_name, models in loaded_data.items():
             combined_data.setdefault(FC_name, {})
             for model_name, metrics in models.items():
+                print(model_name)
                 combined_data[FC_name].setdefault(model_name, {})
                 for metric_name, values in metrics.items():
-                    combined_data[FC_name][model_name].setdefault(metric_name, {}).update(values)
+                    if isinstance(values, dict):
+                        combined_data[FC_name][model_name].setdefault(metric_name, {}).update(values)
+                    else:
+                        combined_data[FC_name][model_name][metric_name] = values
     return combined_data
 
 
@@ -210,7 +214,7 @@ def main():
                         with open(os.path.join(root, file), "r") as f:
                             loaded_data = json.load(f)
                             key = os.path.basename(file).split("-"+model+"_")[1].split("-")[0]  # Extract FC type (COH, iCOH, PDC, PLV)
-                            merged_data[key] = loaded_data[model]  # Store under the extracted key
+                            merged_data[key] = loaded_data  # Store under the extracted key
             output_file_path = os.path.join(script_dir, f"output_data-merged-{model}.json")
 
             # Save merged data
@@ -223,8 +227,8 @@ def main():
 
     merged_json_files = [
         # "output_data-merged-GCN.json",
-        # "output_data-merged-CNN.json",
-        # "output_data-merged-MLP.json",
+        "output_data-merged-CNN.json",
+        "output_data-merged-MLP.json",
         "output_data-merged-SK.json"
     ]
 
