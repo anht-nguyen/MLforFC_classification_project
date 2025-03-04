@@ -28,3 +28,20 @@ Generate a Minimal `requirements.txt`:
 ``` 
 pipreqs . --force
 ```
+
+
+## Running classification algorithms:
+
+Before running the classification, check the `config.py` script which store most important information, especially training parameters.
+
+ML models: run `python ML_models_training_validating.py` 
+
+Tip: Use `nohup python <script.py> &` to run python script in background (non tmux option)
+
+For each of the DL models, run the corresponding shell script with tmux:
+
+```
+sh ./autorun_<model>_model_singleFC.sh <tmux session name>
+```
+
+To open the tmux session: `tmux -a -t <session name>`
