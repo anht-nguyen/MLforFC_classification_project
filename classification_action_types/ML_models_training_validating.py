@@ -114,11 +114,11 @@ for FC_name in os.listdir(FC_DATA_PATH):
 
         auc_errors, accuracy_errors, specificity_errors, sensitivity_errors = get_accuracy_measures_errors(y_true_all_compute_errors, y_pred_all_compute_errors, y_scores_all_compute_errors, NUM_CLASSES)
 
-        output_data[FC_name].update({classifier_name: {"best_params":best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity},
+        output_data[FC_name].update({classifier_name: {"best_params":best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity,
             "AUC_errors": auc_errors,
             "Acc_errors": accuracy_errors,
             "Spec_errors": specificity_errors,
-            "Sens_errors": sensitivity_errors })
+            "Sens_errors": sensitivity_errors }})
 
 # Save results
 json_filename = save_to_json(output_data, "ML_models")

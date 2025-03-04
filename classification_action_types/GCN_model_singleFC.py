@@ -122,11 +122,11 @@ def train_gcn_model(FC_name, full_dataset):
     auc_errors, accuracy_errors, specificity_errors, sensitivity_errors = get_accuracy_measures_errors(y_true_all_compute_errors, y_pred_all_compute_errors, y_scores_all_compute_errors, NUM_CLASSES)
 
 
-    output_data[FC_name].update({"GCN": {"best_params": best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity},
+    output_data[FC_name].update({"GCN": {"best_params": best_params, "FPR": fpr, "TPR": tpr, "AUC": {0: final_auc}, "Acc": accuracy, "Spec": specificity, "Sens": sensitivity,
             "AUC_errors": auc_errors,
             "Acc_errors": accuracy_errors,
             "Spec_errors": specificity_errors,
-            "Sens_errors": sensitivity_errors})
+            "Sens_errors": sensitivity_errors}})
 
     json_filename = save_to_json(output_data, f"GCN_{FC_name}")
     print(f"✅ Results saved: {json_filename}")
