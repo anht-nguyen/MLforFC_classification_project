@@ -350,8 +350,8 @@ def main():
 
     combined_data = load_json_files(merged_json_files, script_dir)
 
-    # plot_mean_roc_fc(combined_data, script_dir)
-    # plot_mean_roc_model(combined_data, script_dir)
+    plot_mean_roc_fc(combined_data, script_dir)
+    plot_mean_roc_model(combined_data, script_dir)
 
     df_results = compute_performance_errors(combined_data)
     export_results_to_csv(df_results, os.path.join(script_dir, "performance_errors.csv"))

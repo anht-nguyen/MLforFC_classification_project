@@ -1,12 +1,4 @@
 Model,Feature Category,Measure,Mean,95% CI Error
-GCN,COH,AUC_errors,1.0,0.0
-GCN,COH,Acc_errors,0.999,0.0
-GCN,COH,Spec_errors,1.0,0.0
-GCN,COH,Sens_errors,1.0,0.0
-GCN,iCOH,AUC_errors,1.0,0.0
-GCN,iCOH,Acc_errors,0.996,0.001
-GCN,iCOH,Spec_errors,0.999,0.001
-GCN,iCOH,Sens_errors,1.0,0.0
 GCN,PDC,AUC_errors,1.0,0.0
 GCN,PDC,Acc_errors,0.999,0.0
 GCN,PDC,Spec_errors,0.999,0.001
@@ -15,18 +7,18 @@ GCN,PLV,AUC_errors,1.0,0.0
 GCN,PLV,Acc_errors,0.998,0.001
 GCN,PLV,Spec_errors,0.999,0.001
 GCN,PLV,Sens_errors,1.0,0.0
+GCN,COH,AUC_errors,1.0,0.0
+GCN,COH,Acc_errors,0.999,0.0
+GCN,COH,Spec_errors,1.0,0.0
+GCN,COH,Sens_errors,1.0,0.0
+GCN,iCOH,AUC_errors,1.0,0.0
+GCN,iCOH,Acc_errors,0.996,0.001
+GCN,iCOH,Spec_errors,0.999,0.001
+GCN,iCOH,Sens_errors,1.0,0.0
 GCN,Spectral Granger,AUC_errors,1.0,0.0
 GCN,Spectral Granger,Acc_errors,0.999,0.0
 GCN,Spectral Granger,Spec_errors,1.0,0.0
 GCN,Spectral Granger,Sens_errors,1.0,0.001
-CNN,COH,AUC_errors,0.538,0.006
-CNN,COH,Acc_errors,0.218,0.004
-CNN,COH,Spec_errors,0.563,0.017
-CNN,COH,Sens_errors,0.525,0.017
-CNN,iCOH,AUC_errors,0.994,0.001
-CNN,iCOH,Acc_errors,0.961,0.002
-CNN,iCOH,Spec_errors,0.988,0.003
-CNN,iCOH,Sens_errors,0.991,0.003
 CNN,PDC,AUC_errors,0.988,0.003
 CNN,PDC,Acc_errors,0.96,0.002
 CNN,PDC,Spec_errors,0.99,0.003
@@ -35,18 +27,18 @@ CNN,PLV,AUC_errors,0.542,0.006
 CNN,PLV,Acc_errors,0.222,0.004
 CNN,PLV,Spec_errors,0.524,0.018
 CNN,PLV,Sens_errors,0.535,0.017
+CNN,COH,AUC_errors,0.538,0.006
+CNN,COH,Acc_errors,0.218,0.004
+CNN,COH,Spec_errors,0.563,0.017
+CNN,COH,Sens_errors,0.525,0.017
+CNN,iCOH,AUC_errors,0.994,0.001
+CNN,iCOH,Acc_errors,0.961,0.002
+CNN,iCOH,Spec_errors,0.988,0.003
+CNN,iCOH,Sens_errors,0.991,0.003
 CNN,Spectral Granger,AUC_errors,0.992,0.002
 CNN,Spectral Granger,Acc_errors,0.962,0.002
 CNN,Spectral Granger,Spec_errors,0.992,0.002
 CNN,Spectral Granger,Sens_errors,0.989,0.003
-MLP,COH,AUC_errors,0.505,0.006
-MLP,COH,Acc_errors,0.214,0.004
-MLP,COH,Spec_errors,0.45,0.017
-MLP,COH,Sens_errors,0.504,0.017
-MLP,iCOH,AUC_errors,0.982,0.003
-MLP,iCOH,Acc_errors,0.962,0.002
-MLP,iCOH,Spec_errors,0.989,0.003
-MLP,iCOH,Sens_errors,0.99,0.003
 MLP,PDC,AUC_errors,0.878,0.005
 MLP,PDC,Acc_errors,0.649,0.007
 MLP,PDC,Spec_errors,0.861,0.009
@@ -55,7 +47,75 @@ MLP,PLV,AUC_errors,0.519,0.006
 MLP,PLV,Acc_errors,0.209,0.003
 MLP,PLV,Spec_errors,0.463,0.016
 MLP,PLV,Sens_errors,0.478,0.016
+MLP,COH,AUC_errors,0.505,0.006
+MLP,COH,Acc_errors,0.214,0.004
+MLP,COH,Spec_errors,0.45,0.017
+MLP,COH,Sens_errors,0.504,0.017
+MLP,iCOH,AUC_errors,0.982,0.003
+MLP,iCOH,Acc_errors,0.962,0.002
+MLP,iCOH,Spec_errors,0.989,0.003
+MLP,iCOH,Sens_errors,0.99,0.003
 MLP,Spectral Granger,AUC_errors,0.899,0.004
 MLP,Spectral Granger,Acc_errors,0.68,0.004
 MLP,Spectral Granger,Spec_errors,0.899,0.008
 MLP,Spectral Granger,Sens_errors,0.876,0.008
+SVC,PDC,AUC_errors,0.849,0.03
+SVC,PDC,Acc_errors,0.61,0.026
+SVC,PDC,Spec_errors,0.857,0.047
+SVC,PDC,Sens_errors,0.823,0.061
+SVC,PLV,AUC_errors,0.544,0.047
+SVC,PLV,Acc_errors,0.195,0.022
+SVC,PLV,Spec_errors,0.38,0.138
+SVC,PLV,Sens_errors,0.599,0.168
+SVC,COH,AUC_errors,0.564,0.031
+SVC,COH,Acc_errors,0.185,0.02
+SVC,COH,Spec_errors,0.445,0.186
+SVC,COH,Sens_errors,0.48,0.188
+SVC,iCOH,AUC_errors,0.991,0.012
+SVC,iCOH,Acc_errors,0.974,0.015
+SVC,iCOH,Spec_errors,0.99,0.021
+SVC,iCOH,Sens_errors,1.0,
+SVC,Spectral Granger,AUC_errors,0.675,0.035
+SVC,Spectral Granger,Acc_errors,0.32,0.022
+SVC,Spectral Granger,Spec_errors,0.715,0.063
+SVC,Spectral Granger,Sens_errors,0.544,0.09
+LogReg,PDC,AUC_errors,0.654,0.049
+LogReg,PDC,Acc_errors,0.36,0.037
+LogReg,PDC,Spec_errors,0.687,0.117
+LogReg,PDC,Sens_errors,0.717,0.084
+LogReg,PLV,AUC_errors,0.461,0.055
+LogReg,PLV,Acc_errors,0.195,0.02
+LogReg,PLV,Spec_errors,0.344,0.114
+LogReg,PLV,Sens_errors,0.57,0.101
+LogReg,COH,AUC_errors,0.464,0.039
+LogReg,COH,Acc_errors,0.179,0.027
+LogReg,COH,Spec_errors,0.359,0.151
+LogReg,COH,Sens_errors,0.477,0.163
+LogReg,iCOH,AUC_errors,0.598,0.044
+LogReg,iCOH,Acc_errors,0.287,0.037
+LogReg,iCOH,Spec_errors,0.575,0.113
+LogReg,iCOH,Sens_errors,0.662,0.111
+LogReg,Spectral Granger,AUC_errors,0.654,0.033
+LogReg,Spectral Granger,Acc_errors,0.319,0.025
+LogReg,Spectral Granger,Spec_errors,0.633,0.078
+LogReg,Spectral Granger,Sens_errors,0.621,0.088
+RFC,PDC,AUC_errors,0.999,0.001
+RFC,PDC,Acc_errors,0.968,0.015
+RFC,PDC,Spec_errors,1.0,
+RFC,PDC,Sens_errors,1.0,
+RFC,PLV,AUC_errors,0.495,0.038
+RFC,PLV,Acc_errors,0.208,0.024
+RFC,PLV,Spec_errors,0.436,0.083
+RFC,PLV,Sens_errors,0.516,0.069
+RFC,COH,AUC_errors,0.475,0.036
+RFC,COH,Acc_errors,0.209,0.026
+RFC,COH,Spec_errors,0.451,0.086
+RFC,COH,Sens_errors,0.473,0.103
+RFC,iCOH,AUC_errors,0.999,0.001
+RFC,iCOH,Acc_errors,0.976,0.013
+RFC,iCOH,Spec_errors,0.98,0.029
+RFC,iCOH,Sens_errors,0.989,0.023
+RFC,Spectral Granger,AUC_errors,0.997,0.003
+RFC,Spectral Granger,Acc_errors,0.961,0.024
+RFC,Spectral Granger,Spec_errors,1.0,
+RFC,Spectral Granger,Sens_errors,1.0,
