@@ -289,17 +289,63 @@ def compute_performance_errors(data):
     return df_results
 
 
+def curate_merge_json(script_dir):
+    model_names = ["GCN", "CNN", "MLP", "SK"]
+
+    for model in model_names:
+        if model == "SK":
+            # Iterate through files in the directory
+            for root, dirs, files in os.walk(script_dir):
+                for file in files:
+                    if "output_data-ML_models" in file and file.endswith(".json"):
+                        old_path = os.path.join(root, file)
+                        new_path = os.path.join(root, "output_data-merged-SK.json")
+                        
+                        # Rename the file
+                        os.rename(old_path, new_path)
+                        print(f"Renamed: {file} -> output_data-merged-SK.json")
+        else:        
+            merged_data = {}
+            for root, dirs, files in os.walk(script_dir):
+                for file in files:
+                    if file.endswith(".json") and 'output_data-'+ model in file:
+                        print(file)
+                        with open(os.path.join(root, file), "r") as f:
+                            if model == "GCN":
+                                loaded_data = json.load(f)
+                                loaded_data = loaded_data[list(loaded_data.keys())[0]]
+                                if len(list(loaded_data.keys())) > 1:
+                                    # Move the data under 'GCN'
+                                    for key in ['AUC_errors', 'Acc_errors', 'Spec_errors', 'Sens_errors']:
+                                        if key in loaded_data:
+                                            loaded_data['GCN'][key] = loaded_data.pop(key)
+                                print('List keys: ' ,list(loaded_data.keys()))
+
+                            else:
+                                loaded_data = json.load(f)
+                            key = os.path.basename(file).split("-"+model+"_")[1].split("-")[0]  # Extract FC type (COH, iCOH, PDC, PLV)
+                            print(key)
+                            merged_data[key] = loaded_data  # Store under the extracted key
+            output_file_path = os.path.join(script_dir, f"output_data-merged-{model}.json")
+
+            # Save merged data
+            with open(output_file_path, "w") as output_file:
+                json.dump(merged_data, output_file, indent=4)
+
+            print(f"Merged JSON saved as: {output_file_path}")
+
+
 # === Main Function ===
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # curate_merge_json(script_dir)
+    curate_merge_json(script_dir)
 
     merged_json_files = [
         "output_data-merged-GCN.json",
         "output_data-merged-CNN.json",
         "output_data-merged-MLP.json",
-        # "output_data-merged-SK.json"
+        "output_data-merged-SK.json"
     ]
 
     combined_data = load_json_files(merged_json_files, script_dir)
