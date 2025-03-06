@@ -269,11 +269,11 @@ def compute_performance_errors(data):
                 mean_value = round(np.mean(np.array(values_list)), 3) if values_list else np.nan
 
                 # Compute 95% CI error (difference between mean and one of the CI bounds)
-                if len(values_list) > 1:
+                if len(values_list) > 1 and not any(math.isnan(x) for x in values_list):
                     ci_bounds = stats.t.interval(0.95, len(values_list) - 1, loc=mean_value, scale=stats.sem(values_list))
                     ci_error = round(mean_value - ci_bounds[0], 3)  # Compute error as the difference from mean to lower bound
                 else:
-                    ci_error = 0  # If only one value, there's no confidence interval
+                    ci_error = 0  # If only one value or contains NaNs, there's no confidence interval
 
                 # Append results to list
                 results_list.append({
@@ -339,7 +339,7 @@ def curate_merge_json(script_dir):
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
-    curate_merge_json(script_dir)
+    # curate_merge_json(script_dir)
 
     merged_json_files = [
         "output_data-merged-GCN.json",
@@ -350,8 +350,8 @@ def main():
 
     combined_data = load_json_files(merged_json_files, script_dir)
 
-    plot_mean_roc_fc(combined_data, script_dir)
-    plot_mean_roc_model(combined_data, script_dir)
+    # plot_mean_roc_fc(combined_data, script_dir)
+    # plot_mean_roc_model(combined_data, script_dir)
 
     df_results = compute_performance_errors(combined_data)
     export_results_to_csv(df_results, os.path.join(script_dir, "performance_errors.csv"))
