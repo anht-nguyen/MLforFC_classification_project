@@ -278,7 +278,7 @@ def compute_performance_errors(data):
                 # Append results to list
                 results_list.append({
                     "Model": model_name,
-                    "Feature Category": fc_name,
+                    "FC_metrics": fc_name,
                     "Measure": measure,
                     "Mean": mean_value,
                     "95% CI Error": ci_error  # Only exporting the error instead of CI bounds
