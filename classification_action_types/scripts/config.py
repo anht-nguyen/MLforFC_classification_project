@@ -45,3 +45,21 @@ NUM_CHANNELS = 10
 
 # Device to use for training (CPU/GPU)
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# List of model names for classification
+MODEL_NAMES = ["GCN", "CNN", "MLP", "SK"]
+
+# List of feature extraction methods
+FEATURE_EXTRACTION_METHODS = [
+    "FC",  # Functional Connectivity
+    "PSD",  # Power Spectral Density
+]
+
+# List of FC metrics
+FC_METRICS = [
+    "PLV",  # Phase Locking Value
+    "PDC",  # Partial Directed Coherence
+    "COH",  # Coherence
+    "iCOH",  # Imaginary Coherence
+    "Spectral Granger",  # Spectral Granger Causality
+]
