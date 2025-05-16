@@ -8,3 +8,19 @@ Welcome to the MLforFC Classification Project repository. This project focuses o
 2. **Action Type Classification**: Classify various types of observed actions.
 
 Explore the repository to learn more about the models and methodologies used for these classification tasks.
+
+
+
+---
+## NOTE !!!
+
+Update 5/16/2025:
+
+The evaluation metrics are current incorrect, as the specificity and sensitivity are for binary classification.
+For multi-class classification in this study, we need to compute metrics like : 
+- TP, FP, TN, and FN per class
+- Accuracy
+- Precision (P)
+- Recall (R)
+- F1 score (F1)
+- Area under the ROC (Receiver Operating Characteristic) curve or simply AUC (AUC)
