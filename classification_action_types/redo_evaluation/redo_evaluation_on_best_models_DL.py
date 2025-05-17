@@ -176,7 +176,7 @@ def main():
         for k, v in results.items(): print(f"{k}: {v}")
 
     # Write summary
-    out_json = os.path.join(this_dir, 're_evaluation_results.json')
+    out_json = os.path.join(this_dir, f"re_evaluation_{selected_model}_results.json")
     with open(out_json, 'w') as f:
         json.dump({selected_model: all_evals}, f, indent=2)
     print(f"\n✔ Saved metrics at {out_json} and checkpoints in {ckpt_dir}")
