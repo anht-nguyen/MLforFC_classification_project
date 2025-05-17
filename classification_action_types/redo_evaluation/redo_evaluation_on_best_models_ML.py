@@ -29,56 +29,65 @@ from scripts.config import (
     NUM_CLASSES
 )
 
+model_names = ["SVC", "LogReg", "RFC"]
+
 if __name__ == '__main__':
     # Ensure data is loaded
     load_datasets()
 
     # Load best hyperparameters from previous tuning
-    json_path = os.path.join(this_dir, 'ML_models.json')
-    best_models = json.load(open(json_path, 'r'))
+    json_path = os.path.join(this_dir, f"output_data-merged-SK.json")
+    metrics_store = json.load(open(json_path, 'r'))
+    
+    for model_name in model_names:
 
-    all_evals = {}
 
-    for FC_name, classifiers in best_models.items():
-        print(f"\n=== Evaluating ML models on FC = {FC_name} ===")
-        all_evals[FC_name] = {}
+        all_evals = {}
 
-        # Prepare full dataset
-        basepath = os.path.join(FC_DATA_PATH, FC_name)
-        files = get_files_by_class(basepath)
-        splits = split_datasets(files)
-        matlab_ds = MatlabDataset(file_list=splits['full'], tensor=False, transform=flatten_transform)
-        data = dataset_type_converter(matlab_ds)
-        X_full = np.array(data['x'])
-        y_full = np.array(data['y'])
+        for FC_name, metrics in metrics_store.items():
 
-        # Cross-validator
-        cv = RepeatedStratifiedKFold(
-            n_splits=K_FOLDS,
-            n_repeats=NUM_REPEATS_FINAL,
-            random_state=42
-        )
+            print(f"\n=== {model_name} FC = {FC_name} ===")
+            best_params = metrics[model_name]['best_params']
+            print('Best hyperparameters:', json.dumps(best_params, indent=2))
+
+            all_evals[FC_name] = {}
+
+            # Prepare full dataset
+            basepath = os.path.join(FC_DATA_PATH, FC_name)
+            files = get_files_by_class(basepath)
+            splits = split_datasets(files)
+            matlab_ds = MatlabDataset(file_list=splits['full'], tensor=False, transform=flatten_transform)
+            data = dataset_type_converter(matlab_ds)
+            X_full = np.array(data['x'])
+            y_full = np.array(data['y'])
+
+            # Cross-validator
+            cv = RepeatedStratifiedKFold(
+                n_splits=K_FOLDS,
+                n_repeats=NUM_REPEATS_FINAL,
+                random_state=42
+            )
 
         # Loop over each classifier
-        for clf_name, params in classifiers.items():
-            print(f"-> {clf_name} with params: {params}")
+        # for clf_name, params in classifiers.items():
+        #     print(f"-> {clf_name} with params: {params}")
 
             # Instantiate classifier
-            if clf_name == 'SVC':
+            if model_name == 'SVC':
                 model = SVC(
-                    C=params['svc_C'],
-                    gamma=params['svc_gamma'],
+                    C=best_params['svc_C'],
+                    gamma=best_params['svc_gamma'],
                     probability=True
                 )
-            elif clf_name == 'LogReg':
+            elif model_name == 'LogReg':
                 model = LogisticRegression(
-                    C=params['logreg_C'],
+                    C=best_params['logreg_C'],
                     max_iter=1000
                 )
             else:  # RFC
                 model = RandomForestClassifier(
-                    n_estimators=params['rfc_n_estimators'],
-                    max_depth=params['rfc_max_depth'],
+                    n_estimators=best_params['rfc_n_estimators'],
+                    max_depth=best_params['rfc_max_depth'],
                     random_state=42
                 )
 
@@ -112,8 +121,8 @@ if __name__ == '__main__':
             }
 
             # Save per-classifier results
-            all_evals[FC_name][clf_name] = {
-                'best_params': params,
+            all_evals[FC_name][model_name] = {
+                'best_params': best_params,
                 'metrics': metrics
             }
 
