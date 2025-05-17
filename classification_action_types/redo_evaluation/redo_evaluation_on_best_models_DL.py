@@ -76,7 +76,7 @@ def main():
         else:
             full_ds = MatlabDataset(file_list=splits, tensor=True)
 
-        rkf = RepeatedKFold(n_splits=2, n_repeats=1, random_state=42)
+        rkf = RepeatedKFold(n_splits=K_FOLDS, n_repeats=NUM_REPEATS_FINAL, random_state=42)
 
         y_true_all, y_pred_all, y_score_all = [], [], []
         train_list, test_list = [], []
