@@ -6,7 +6,15 @@ import numpy as np
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, roc_auc_score, confusion_matrix
+from sklearn.metrics import (
+    accuracy_score,
+    balanced_accuracy_score,
+    precision_recall_fscore_support,
+    classification_report,
+    confusion_matrix,
+    roc_auc_score,
+    jaccard_score,
+)
 from sklearn.model_selection import RepeatedStratifiedKFold
 
 # Add project root to path
@@ -25,10 +33,9 @@ model_names = ["SVC", "LogReg", "RFC"]
 # Path to tuned hyperparameters JSON
 HP_JSON = os.path.join(this_dir, 'output_data-merged-SK.json')
 # Output results file
-OUT_JSON = os.path.join(this_dir, 're_evaluation_ML_results.json')
+OUT_JSON = os.path.join(this_dir, 're_evaluation_ML_results_full_metrics.json')
 # Directory to save prediction checkpoints
 CKPT_DIR = os.path.join(this_dir, 'ml_checkpoints')
-
 
 def build_model(name, params):
     """Instantiate a classifier given its name and parameter dict."""
@@ -41,7 +48,6 @@ def build_model(name, params):
                                       max_depth=params['rfc_max_depth'], random_state=42)
     else:
         raise ValueError(f"Unknown model name: {name}")
-
 
 def load_all_datasets(fc_names):
     """Load and preprocess datasets for each FC name."""
@@ -57,9 +63,8 @@ def load_all_datasets(fc_names):
         data_store[fc] = (X, y)
     return data_store
 
-
 if __name__ == '__main__':
-    # Ensure datasets are available
+    # Ensure datasets are loaded
     load_datasets()
 
     # Prepare checkpoint directory
@@ -115,39 +120,55 @@ if __name__ == '__main__':
             y_pred = np.concatenate(y_pred_list)
             y_score = np.vstack(y_score_list)
 
-            # Save checkpoint for further analysis
+            # Save raw predictions and indices
             ckpt_path = os.path.join(CKPT_DIR, f"{model_name}_{fc}_checkpoint.npz")
-            # convert index lists (varying lengths) to object-dtype arrays
-            train_idx_arr = np.array(train_idx_list, dtype=object)
-            test_idx_arr  = np.array(test_idx_list,  dtype=object)
-
             np.savez_compressed(
                 ckpt_path,
                 y_true=y_true,
                 y_pred=y_pred,
                 y_score=y_score,
-                train_idx=train_idx_arr,
-                test_idx=test_idx_arr
+                train_idx=np.array(train_idx_list, dtype=object),
+                test_idx=np.array(test_idx_list, dtype=object)
             )
 
-            # Compute metrics
+            # Compute standard multi-class metrics
             acc = accuracy_score(y_true, y_pred)
-            auc = roc_auc_score(y_true, y_score, multi_class='ovr', average='macro')
-            cm = confusion_matrix(y_true, y_pred).tolist()
+            bal_acc = balanced_accuracy_score(y_true, y_pred)
+            precision_macro, recall_macro, f1_macro, _ = precision_recall_fscore_support(
+                y_true, y_pred, average='macro')
+            precision_micro, recall_micro, f1_micro, _ = precision_recall_fscore_support(
+                y_true, y_pred, average='micro')
+            jaccard_macro = jaccard_score(y_true, y_pred, average='macro')
+            jaccard_micro = jaccard_score(y_true, y_pred, average='micro')
+            auc_macro = roc_auc_score(y_true, y_score, multi_class='ovr', average='macro')
+            cm = confusion_matrix(y_true, y_pred)
+
+            # Classification report for per-class metrics
+            class_report = classification_report(y_true, y_pred, output_dict=True)
 
             results[model_name][fc] = {
                 'best_params': params,
                 'metrics': {
                     'accuracy': float(acc),
-                    'auc_macro': float(auc),
-                    'confusion_matrix': cm,
+                    'balanced_accuracy': float(bal_acc),
+                    'precision_macro': float(precision_macro),
+                    'recall_macro': float(recall_macro),
+                    'f1_macro': float(f1_macro),
+                    'precision_micro': float(precision_micro),
+                    'recall_micro': float(recall_micro),
+                    'f1_micro': float(f1_micro),
+                    'jaccard_macro': float(jaccard_macro),
+                    'jaccard_micro': float(jaccard_micro),
+                    'auc_macro': float(auc_macro),
+                    'confusion_matrix': cm.tolist(),
+                    'classification_report': class_report,
                 },
                 'checkpoint': ckpt_path
             }
 
-            print(f"  Accuracy: {acc:.4f}, AUC: {auc:.4f}")
+            print(f"  Accuracy: {acc:.4f}, AUC_macro: {auc_macro:.4f}, F1_macro: {f1_macro:.4f}")
 
     # Save summary results
     with open(OUT_JSON, 'w') as f:
         json.dump(results, f, indent=2)
-    print(f"\n✔ Results and checkpoints saved. Metrics in {OUT_JSON}, checkpoints in {CKPT_DIR}")
+    print(f"\n✔ Full metrics results saved to {OUT_JSON}, checkpoints in {CKPT_DIR}")

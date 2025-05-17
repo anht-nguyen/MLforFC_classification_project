@@ -45,3 +45,6 @@ Monitor output: `tail -f <name>.out`
 1. Find PIDs with `ps -ef | grep redo_eval` (look for `?` in TTY column)
 2. Kill with `kill -9 <PID1> <PID2> ...`
 3. Verify with `ps -ef | grep redo_eval`
+
+
+**To continuously monitor GPU usage:** `watch -n 1 nvidia-smi`
