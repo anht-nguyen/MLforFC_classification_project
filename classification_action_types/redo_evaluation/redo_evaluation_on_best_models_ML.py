@@ -117,13 +117,17 @@ if __name__ == '__main__':
 
             # Save checkpoint for further analysis
             ckpt_path = os.path.join(CKPT_DIR, f"{model_name}_{fc}_checkpoint.npz")
+            # convert index lists (varying lengths) to object-dtype arrays
+            train_idx_arr = np.array(train_idx_list, dtype=object)
+            test_idx_arr  = np.array(test_idx_list,  dtype=object)
+
             np.savez_compressed(
                 ckpt_path,
                 y_true=y_true,
                 y_pred=y_pred,
                 y_score=y_score,
-                train_idx=train_idx_list,
-                test_idx=test_idx_list
+                train_idx=train_idx_arr,
+                test_idx=test_idx_arr
             )
 
             # Compute metrics
