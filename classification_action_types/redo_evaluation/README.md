@@ -26,3 +26,14 @@ y_score = data['y_score']
 train_idx = data['train_idx']  # list of index arrays
 test_idx = data['test_idx']
 ```
+
+
+---
+To use NOHUP: `cd` to `classification_action_types` folder and run commands like example below for DL and ML models
+```
+nohup python redo_evaluation\redo_evaluation_on_best_models_DL.py <1 model name (i.e., CNN, GCN, MLP)> > <unique name>.out &
+```
+
+```
+nohup python redo_evaluation\redo_evaluation_on_best_models_ML.py > <unique name>.out &
+```

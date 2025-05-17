@@ -27,7 +27,7 @@ HP_JSON = os.path.join(this_dir, 'output_data-merged-SK.json')
 # Output results file
 OUT_JSON = os.path.join(this_dir, 're_evaluation_ML_results.json')
 # Directory to save prediction checkpoints
-CKPT_DIR = os.path.join(this_dir, 'checkpoints')
+CKPT_DIR = os.path.join(this_dir, 'ml_checkpoints')
 
 
 def build_model(name, params):
