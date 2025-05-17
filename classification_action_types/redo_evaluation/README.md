@@ -12,3 +12,17 @@ Using the saved “best” checkpoints and output files from `explore_output_plo
    - Balanced accuracy  
    - Per-class specificity  
 4. Export corrected metrics for downstream analysis and plotting
+
+
+
+---
+Load the checkpoint via:
+
+```
+data = np.load('checkpoints/SVC_FOO_checkpoint.npz', allow_pickle=True)
+y_true = data['y_true']
+y_pred = data['y_pred']
+y_score = data['y_score']
+train_idx = data['train_idx']  # list of index arrays
+test_idx = data['test_idx']
+```

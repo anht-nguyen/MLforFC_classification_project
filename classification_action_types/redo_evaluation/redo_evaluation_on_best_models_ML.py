@@ -26,6 +26,8 @@ model_names = ["SVC", "LogReg", "RFC"]
 HP_JSON = os.path.join(this_dir, 'output_data-merged-SK.json')
 # Output results file
 OUT_JSON = os.path.join(this_dir, 're_evaluation_ML_results.json')
+# Directory to save prediction checkpoints
+CKPT_DIR = os.path.join(this_dir, 'checkpoints')
 
 
 def build_model(name, params):
@@ -60,6 +62,9 @@ if __name__ == '__main__':
     # Ensure datasets are available
     load_datasets()
 
+    # Prepare checkpoint directory
+    os.makedirs(CKPT_DIR, exist_ok=True)
+
     # Load hyperparameters
     with open(HP_JSON, 'r') as f:
         hp_store = json.load(f)
@@ -85,10 +90,15 @@ if __name__ == '__main__':
             model = build_model(model_name, params)
             X, y = datasets[fc]
 
-            # Collect predictions
-            y_true, y_pred, y_score = [], [], []
+            # Lists to collect data across folds
+            y_true_list, y_pred_list, y_score_list = [], [], []
+            train_idx_list, test_idx_list = [], []
+
             for fold, (train_idx, test_idx) in enumerate(cv.split(X, y), start=1):
                 print(f"  Fold {fold}/{cv.get_n_splits()}")
+                train_idx_list.append(train_idx)
+                test_idx_list.append(test_idx)
+
                 X_tr, X_te = X[train_idx], X[test_idx]
                 y_tr, y_te = y[train_idx], y[test_idx]
 
@@ -96,13 +106,25 @@ if __name__ == '__main__':
                 y_pred_fold = model.predict(X_te)
                 y_score_fold = model.predict_proba(X_te)
 
-                y_true.extend(y_te)
-                y_pred.extend(y_pred_fold)
-                y_score.extend(y_score_fold)
+                y_true_list.append(y_te)
+                y_pred_list.append(y_pred_fold)
+                y_score_list.append(y_score_fold)
 
-            y_true = np.array(y_true)
-            y_pred = np.array(y_pred)
-            y_score = np.vstack(y_score)
+            # Concatenate lists
+            y_true = np.concatenate(y_true_list)
+            y_pred = np.concatenate(y_pred_list)
+            y_score = np.vstack(y_score_list)
+
+            # Save checkpoint for further analysis
+            ckpt_path = os.path.join(CKPT_DIR, f"{model_name}_{fc}_checkpoint.npz")
+            np.savez_compressed(
+                ckpt_path,
+                y_true=y_true,
+                y_pred=y_pred,
+                y_score=y_score,
+                train_idx=train_idx_list,
+                test_idx=test_idx_list
+            )
 
             # Compute metrics
             acc = accuracy_score(y_true, y_pred)
@@ -115,12 +137,13 @@ if __name__ == '__main__':
                     'accuracy': float(acc),
                     'auc_macro': float(auc),
                     'confusion_matrix': cm,
-                }
+                },
+                'checkpoint': ckpt_path
             }
 
             print(f"  Accuracy: {acc:.4f}, AUC: {auc:.4f}")
 
-    # Save all results
+    # Save summary results
     with open(OUT_JSON, 'w') as f:
         json.dump(results, f, indent=2)
-    print(f"\n✔ Results written to {OUT_JSON}")
+    print(f"\n✔ Results and checkpoints saved. Metrics in {OUT_JSON}, checkpoints in {CKPT_DIR}")
