@@ -21,7 +21,7 @@ train_idx, test_idx = data['train_idx'], data['test_idx']
 
 ## Running Evaluations in Parallel
 
-You can run scripts in parallel with `screen` (recommended) or `nohup`.
+First `cd` to `classification_action_types` folder. You can run scripts in parallel with `screen` (recommended) or `nohup`.
 
 **Using `screen`:**
 ```sh
