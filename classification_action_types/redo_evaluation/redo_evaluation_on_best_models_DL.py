@@ -171,8 +171,8 @@ def main():
                              y_true=y_true,
                              y_pred=y_pred,
                              y_score=y_score,
-                             train_splits=train_splits,
-                             test_splits=test_splits)
+                             train_splits=np.array(train_splits, dtype=object),
+                             test_splits=np.array(test_splits,  dtype=object))
 
         # Compute metrics
         metrics = {}
