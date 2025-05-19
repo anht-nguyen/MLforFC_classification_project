@@ -210,7 +210,7 @@ def main():
             print(json.dumps(metrics, indent=2))
 
     # Save summary
-    out_json = os.path.join(this_dir, f"re_evaluation_{selected_model}_full_metrics.json")
+    out_json = os.path.join(this_dir, f"re_evaluation_{selected_model}_full_metrics_SpcG_PLV.json")
     with open(out_json, 'w') as f:
         json.dump({selected_model: all_evals}, f, indent=2)
     print(f"\n✅ Saved full metrics to {out_json}")
