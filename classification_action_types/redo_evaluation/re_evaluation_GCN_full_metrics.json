@@ -1,0 +1,539 @@
+{
+  "GCN": {
+    "COH": {
+      "best_params": {
+        "N-GCN": 2,
+        "GCN-hidden": 128,
+        "DropEdge": 0.2,
+        "Dropout": 0.2,
+        "Learning Rate": 0.001,
+        "Batch Size": 32
+      },
+      "metrics": {
+        "accuracy": 0.998757281553398,
+        "balanced_accuracy": 0.9987579879438758,
+        "precision_macro": 0.9987632897486973,
+        "recall_macro": 0.9987579879438758,
+        "f1_macro": 0.9987605508777421,
+        "precision_micro": 0.998757281553398,
+        "recall_micro": 0.998757281553398,
+        "f1_micro": 0.998757281553398,
+        "jaccard_macro": 0.9975242279511811,
+        "jaccard_micro": 0.9975176479714529,
+        "auc_macro": 0.9999871108920132,
+        "auc_micro": 0.9999863827881987,
+        "confusion_matrix": [
+          [
+            10584,
+            8,
+            2,
+            4,
+            2
+          ],
+          [
+            6,
+            10590,
+            0,
+            1,
+            3
+          ],
+          [
+            2,
+            2,
+            10289,
+            2,
+            5
+          ],
+          [
+            7,
+            4,
+            7,
+            10081,
+            1
+          ],
+          [
+            0,
+            3,
+            4,
+            1,
+            9892
+          ]
+        ],
+        "classification_report": {
+          "0": {
+            "precision": 0.9985847721483159,
+            "recall": 0.9984905660377359,
+            "f1-score": 0.9985376668710788,
+            "support": 10600.0
+          },
+          "1": {
+            "precision": 0.9983972848119167,
+            "recall": 0.9990566037735849,
+            "f1-score": 0.9987268354788513,
+            "support": 10600.0
+          },
+          "2": {
+            "precision": 0.9987381091050281,
+            "recall": 0.9989320388349514,
+            "f1-score": 0.9988350645568391,
+            "support": 10300.0
+          },
+          "3": {
+            "precision": 0.9992070571910001,
+            "recall": 0.9981188118811881,
+            "f1-score": 0.9986626380702363,
+            "support": 10100.0
+          },
+          "4": {
+            "precision": 0.9988892254872261,
+            "recall": 0.9991919191919192,
+            "f1-score": 0.9990405494117053,
+            "support": 9900.0
+          },
+          "accuracy": 0.998757281553398,
+          "macro avg": {
+            "precision": 0.9987632897486973,
+            "recall": 0.9987579879438758,
+            "f1-score": 0.9987605508777421,
+            "support": 51500.0
+          },
+          "weighted avg": {
+            "precision": 0.9987574162623863,
+            "recall": 0.998757281553398,
+            "f1-score": 0.9987572616219411,
+            "support": 51500.0
+          }
+        }
+      },
+      "checkpoint": "/home/hienbui/Documents/Projects/MLforFC_classification_project/classification_action_types/redo_evaluation/dl_checkpoints/GCN_COH_checkpoint.npz"
+    },
+    "iCOH": {
+      "best_params": {
+        "N-GCN": 1,
+        "GCN-hidden": 128,
+        "DropEdge": 0.30000000000000004,
+        "Dropout": 0.30000000000000004,
+        "Learning Rate": 0.001,
+        "Batch Size": 16
+      },
+      "metrics": {
+        "accuracy": 0.9957087378640777,
+        "balanced_accuracy": 0.9957845288467297,
+        "precision_macro": 0.9956748043815706,
+        "recall_macro": 0.9957845288467297,
+        "f1_macro": 0.9957192902481762,
+        "precision_micro": 0.9957087378640777,
+        "recall_micro": 0.9957087378640777,
+        "f1_micro": 0.9957087378640777,
+        "jaccard_macro": 0.9914854735417237,
+        "jaccard_micro": 0.9914541482183252,
+        "auc_macro": 0.9999537446235239,
+        "auc_micro": 0.9999509552738242,
+        "confusion_matrix": [
+          [
+            10576,
+            14,
+            6,
+            4,
+            0
+          ],
+          [
+            10,
+            10460,
+            6,
+            87,
+            37
+          ],
+          [
+            9,
+            4,
+            10273,
+            14,
+            0
+          ],
+          [
+            4,
+            4,
+            7,
+            10077,
+            8
+          ],
+          [
+            3,
+            0,
+            2,
+            2,
+            9893
+          ]
+        ],
+        "classification_report": {
+          "0": {
+            "precision": 0.9975476325221656,
+            "recall": 0.9977358490566037,
+            "f1-score": 0.9976417319120837,
+            "support": 10600.0
+          },
+          "1": {
+            "precision": 0.997901163900019,
+            "recall": 0.9867924528301887,
+            "f1-score": 0.9923157195711981,
+            "support": 10600.0
+          },
+          "2": {
+            "precision": 0.9979599766854478,
+            "recall": 0.997378640776699,
+            "f1-score": 0.9976692240458386,
+            "support": 10300.0
+          },
+          "3": {
+            "precision": 0.9894933228593873,
+            "recall": 0.9977227722772277,
+            "f1-score": 0.9935910076907908,
+            "support": 10100.0
+          },
+          "4": {
+            "precision": 0.9954719259408331,
+            "recall": 0.9992929292929293,
+            "f1-score": 0.9973787680209698,
+            "support": 9900.0
+          },
+          "accuracy": 0.9957087378640777,
+          "macro avg": {
+            "precision": 0.9956748043815706,
+            "recall": 0.9957845288467297,
+            "f1-score": 0.9957192902481762,
+            "support": 51500.0
+          },
+          "weighted avg": {
+            "precision": 0.9957242646529967,
+            "recall": 0.9957087378640777,
+            "f1-score": 0.995706038339408,
+            "support": 51500.0
+          }
+        }
+      },
+      "checkpoint": "/home/hienbui/Documents/Projects/MLforFC_classification_project/classification_action_types/redo_evaluation/dl_checkpoints/GCN_iCOH_checkpoint.npz"
+    },
+    "PDC": {
+      "best_params": {
+        "N-GCN": 3,
+        "GCN-hidden": 64,
+        "DropEdge": 0.2,
+        "Dropout": 0.5,
+        "Learning Rate": 0.001,
+        "Batch Size": 32
+      },
+      "metrics": {
+        "accuracy": 0.9982330097087379,
+        "balanced_accuracy": 0.9982439847208756,
+        "precision_macro": 0.9982391292462891,
+        "recall_macro": 0.9982439847208756,
+        "f1_macro": 0.998241143055731,
+        "precision_micro": 0.9982330097087379,
+        "recall_micro": 0.9982330097087379,
+        "f1_micro": 0.9982330097087379,
+        "jaccard_macro": 0.9964886648443334,
+        "jaccard_micro": 0.9964722529123297,
+        "auc_macro": 0.9999594611746302,
+        "auc_micro": 0.9999605675369968,
+        "confusion_matrix": [
+          [
+            10574,
+            15,
+            6,
+            1,
+            4
+          ],
+          [
+            7,
+            10580,
+            4,
+            5,
+            4
+          ],
+          [
+            3,
+            2,
+            10287,
+            0,
+            8
+          ],
+          [
+            8,
+            9,
+            5,
+            10073,
+            5
+          ],
+          [
+            0,
+            0,
+            5,
+            0,
+            9895
+          ]
+        ],
+        "classification_report": {
+          "0": {
+            "precision": 0.9983006042296072,
+            "recall": 0.9975471698113207,
+            "f1-score": 0.9979237448093621,
+            "support": 10600.0
+          },
+          "1": {
+            "precision": 0.9975485574203281,
+            "recall": 0.9981132075471698,
+            "f1-score": 0.9978308026030369,
+            "support": 10600.0
+          },
+          "2": {
+            "precision": 0.9980595711652275,
+            "recall": 0.99873786407767,
+            "f1-score": 0.9983986024166546,
+            "support": 10300.0
+          },
+          "3": {
+            "precision": 0.9994047028475047,
+            "recall": 0.9973267326732673,
+            "f1-score": 0.9983646365032955,
+            "support": 10100.0
+          },
+          "4": {
+            "precision": 0.9978822105687777,
+            "recall": 0.9994949494949495,
+            "f1-score": 0.998687928946306,
+            "support": 9900.0
+          },
+          "accuracy": 0.9982330097087379,
+          "macro avg": {
+            "precision": 0.9982391292462891,
+            "recall": 0.9982439847208756,
+            "f1-score": 0.998241143055731,
+            "support": 51500.0
+          },
+          "weighted avg": {
+            "precision": 0.9982337102889681,
+            "recall": 0.9982330097087379,
+            "f1-score": 0.9982329540332948,
+            "support": 51500.0
+          }
+        }
+      },
+      "checkpoint": "/home/hienbui/Documents/Projects/MLforFC_classification_project/classification_action_types/redo_evaluation/dl_checkpoints/GCN_PDC_checkpoint.npz"
+    },
+    "PLV": {
+      "best_params": {
+        "N-GCN": 3,
+        "GCN-hidden": 128,
+        "DropEdge": 0.4,
+        "Dropout": 0.5,
+        "Learning Rate": 0.001,
+        "Batch Size": 32
+      },
+      "metrics": {
+        "accuracy": 0.9980194174757282,
+        "balanced_accuracy": 0.9980132608974397,
+        "precision_macro": 0.9980267171613002,
+        "recall_macro": 0.9980132608974397,
+        "f1_macro": 0.9980197079136133,
+        "precision_micro": 0.9980194174757282,
+        "recall_micro": 0.9980194174757282,
+        "f1_micro": 0.9980194174757282,
+        "jaccard_macro": 0.9960474124099908,
+        "jaccard_micro": 0.9960466648579512,
+        "auc_macro": 0.9999711508638633,
+        "auc_micro": 0.9999711051465737,
+        "confusion_matrix": [
+          [
+            10587,
+            3,
+            7,
+            3,
+            0
+          ],
+          [
+            5,
+            10579,
+            5,
+            8,
+            3
+          ],
+          [
+            7,
+            5,
+            10281,
+            0,
+            7
+          ],
+          [
+            8,
+            13,
+            6,
+            10066,
+            7
+          ],
+          [
+            2,
+            3,
+            8,
+            2,
+            9885
+          ]
+        ],
+        "classification_report": {
+          "0": {
+            "precision": 0.9979262889999058,
+            "recall": 0.9987735849056604,
+            "f1-score": 0.9983497571785562,
+            "support": 10600.0
+          },
+          "1": {
+            "precision": 0.9977364896727341,
+            "recall": 0.9980188679245283,
+            "f1-score": 0.9978776588218649,
+            "support": 10600.0
+          },
+          "2": {
+            "precision": 0.9974774425147958,
+            "recall": 0.9981553398058253,
+            "f1-score": 0.9978162760227107,
+            "support": 10300.0
+          },
+          "3": {
+            "precision": 0.9987101895029269,
+            "recall": 0.9966336633663366,
+            "f1-score": 0.9976708459289361,
+            "support": 10100.0
+          },
+          "4": {
+            "precision": 0.9982831751161382,
+            "recall": 0.9984848484848485,
+            "f1-score": 0.9983840016159984,
+            "support": 9900.0
+          },
+          "accuracy": 0.9980194174757282,
+          "macro avg": {
+            "precision": 0.9980267171613002,
+            "recall": 0.9980132608974397,
+            "f1-score": 0.9980197079136133,
+            "support": 51500.0
+          },
+          "weighted avg": {
+            "precision": 0.9980197953293535,
+            "recall": 0.9980194174757282,
+            "f1-score": 0.9980193283984276,
+            "support": 51500.0
+          }
+        }
+      },
+      "checkpoint": "/home/hienbui/Documents/Projects/MLforFC_classification_project/classification_action_types/redo_evaluation/dl_checkpoints/GCN_PLV_checkpoint.npz"
+    },
+    "Spectral Granger": {
+      "best_params": {
+        "N-GCN": 2,
+        "GCN-hidden": 64,
+        "DropEdge": 0.30000000000000004,
+        "Dropout": 0.30000000000000004,
+        "Learning Rate": 0.001,
+        "Batch Size": 32
+      },
+      "metrics": {
+        "accuracy": 0.9989126213592233,
+        "balanced_accuracy": 0.9989117490426456,
+        "precision_macro": 0.998907503487164,
+        "recall_macro": 0.9989117490426456,
+        "f1_macro": 0.9989095680931467,
+        "precision_micro": 0.9989126213592233,
+        "recall_micro": 0.9989126213592233,
+        "f1_micro": 0.9989126213592233,
+        "jaccard_macro": 0.9978216379542577,
+        "jaccard_micro": 0.9978276049344402,
+        "auc_macro": 0.9999204054639703,
+        "auc_micro": 0.9999158734093694,
+        "confusion_matrix": [
+          [
+            10594,
+            2,
+            3,
+            1,
+            0
+          ],
+          [
+            5,
+            10585,
+            2,
+            8,
+            0
+          ],
+          [
+            0,
+            2,
+            10290,
+            1,
+            7
+          ],
+          [
+            4,
+            6,
+            1,
+            10082,
+            7
+          ],
+          [
+            0,
+            0,
+            5,
+            2,
+            9893
+          ]
+        ],
+        "classification_report": {
+          "0": {
+            "precision": 0.9991511836272753,
+            "recall": 0.9994339622641509,
+            "f1-score": 0.9992925529406216,
+            "support": 10600.0
+          },
+          "1": {
+            "precision": 0.999056158565361,
+            "recall": 0.9985849056603774,
+            "f1-score": 0.9988204765274828,
+            "support": 10600.0
+          },
+          "2": {
+            "precision": 0.9989321425104358,
+            "recall": 0.9990291262135922,
+            "f1-score": 0.9989806320081549,
+            "support": 10300.0
+          },
+          "3": {
+            "precision": 0.998811174955419,
+            "recall": 0.9982178217821782,
+            "f1-score": 0.9985144102208576,
+            "support": 10100.0
+          },
+          "4": {
+            "precision": 0.9985868577773291,
+            "recall": 0.9992929292929293,
+            "f1-score": 0.9989397687686171,
+            "support": 9900.0
+          },
+          "accuracy": 0.9989126213592233,
+          "macro avg": {
+            "precision": 0.998907503487164,
+            "recall": 0.9989117490426456,
+            "f1-score": 0.9989095680931467,
+            "support": 51500.0
+          },
+          "weighted avg": {
+            "precision": 0.9989126534785384,
+            "recall": 0.9989126213592233,
+            "f1-score": 0.9989125801181723,
+            "support": 51500.0
+          }
+        }
+      },
+      "checkpoint": "/home/hienbui/Documents/Projects/MLforFC_classification_project/classification_action_types/redo_evaluation/dl_checkpoints/GCN_Spectral Granger_checkpoint.npz"
+    }
+  }
+}

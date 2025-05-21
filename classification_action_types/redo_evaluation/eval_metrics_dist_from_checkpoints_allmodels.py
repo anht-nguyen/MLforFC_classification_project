@@ -29,7 +29,7 @@ model_names   = ["CNN", "MLP", "GCN", "SVC", "LogReg", "RFC"]                   
 
 
 # ---------- helpers -------------------------------------------------------- #
-def _fold_indices(z):
+def _fold_indices(z, model_name=None):
     """
     Yield the test indices of each fold stored in the checkpoint.
 
@@ -38,8 +38,14 @@ def _fold_indices(z):
       * 'fold_ids' : same length as y_true, integer fold label
     Falls back to a single fold containing every sample.
     """
-    if "test_idx" in z:
-        for idx in z["test_idx"]:
+    
+    if model_name in ["CNN", "MLP", "GCN"]:
+        keys = ["train_splits", "test_splits"]
+    else:
+        keys = ["train_idx", "test_idx"]
+    
+    if keys[1] in z:
+        for idx in z[keys[1]]:
             yield idx
     elif "fold_ids" in z:
         fid = z["fold_ids"]
@@ -117,7 +123,7 @@ for model_name in model_names:
 
         # --- evaluate each fold separately -------------------------------- #
         perfold_metrics = defaultdict(list)
-        for idx in _fold_indices(z):
+        for idx in _fold_indices(z, model_name):
             m = _compute_metrics(y_true_all[idx],
                                  y_pred_all[idx],
                                  y_score_all[idx])
