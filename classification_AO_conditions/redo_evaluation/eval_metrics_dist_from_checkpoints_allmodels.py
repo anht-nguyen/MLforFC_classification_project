@@ -6,15 +6,14 @@ saved DL checkpoints that contain *per‑fold* predictions.
 A “CI” here is reported as a single conservative error bar:
     err = max(mean – q05 , q95 – mean)
 
-Author: <your name>, 2025‑05‑18
 """
-import os
+import os, sys
 import json
 import numpy as np
 from collections import defaultdict
 from sklearn.metrics import (
     accuracy_score, balanced_accuracy_score, precision_recall_fscore_support,
-    jaccard_score, roc_auc_score, confusion_matrix, classification_report
+    jaccard_score, roc_auc_score, confusion_matrix, classification_report, hamming_loss
 )
 
 # --------------------------------------------------------------------------- #
@@ -25,6 +24,9 @@ dl_ckpt_dir   = os.path.join(this_dir, "dl_checkpoints")   # <- adjust if needed
 ml_ckpt_dir   = os.path.join(this_dir, "ml_checkpoints")   # <- adjust if needed
 meta_dir      = this_dir                                   # HP/meta JSONs live here
 model_names   = ["CNN", "MLP", "GCN", "SVC", "LogReg", "RFC"]                      #  models of interest
+this_dir     = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(this_dir, os.pardir))
+sys.path.insert(0, project_root)
 # --------------------------------------------------------------------------- #
 
 
@@ -76,6 +78,9 @@ def _compute_metrics(y_true, y_pred, y_score):
         "jaccard_micro":   jaccard_score(y_true, y_pred, average="micro"),
         "auc_macro":       roc_auc_score(y_true, y_score, multi_class="ovr",
                                          average="macro"),
+        "auc_micro":       roc_auc_score(y_true, y_score, multi_class="ovr",
+                                         average="micro"),
+        "hamming_loss":    hamming_loss(y_true, y_pred),
     })
     return metrics
 

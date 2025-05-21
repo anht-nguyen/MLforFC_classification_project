@@ -28,6 +28,23 @@ NUM_REPEATS_FINAL = 50
 
 # Number of classes in the dataset: baseline, human-left, human-right, robot-left, robot-right, and landscape
 NUM_CLASSES = 6 
+LABEL_NAMES = [
+    "baseline",
+    "human-left",
+    "human-right",
+    "robot-left",
+    "robot-right",
+    "landscape"
+]
+# Number of FC metrics
+NUM_FC_METRICS = 6
+FC_METRICS = [
+    "PLV",  # Phase Locking Value
+    "PDC",  # Partial Directed Coherence
+    "COH",  # Coherence
+    "iCOH",  # Imaginary Coherence
+    "Spectral Granger",  # Spectral Granger Causality
+]
 
 # Number of frequencies in the PSD data
 NUM_FREQS = 27

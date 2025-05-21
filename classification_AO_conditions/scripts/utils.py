@@ -6,7 +6,7 @@ import pandas as pd
 import math
 import numpy as np
 from scipy.interpolate import interp1d # Import the interp1d function
-
+import warnings
 
 # Dictionary to store file paths for each class
 def get_files_by_class(basepath):
@@ -128,4 +128,78 @@ def average_fpr(fpr_dict):
     mean_fpr = np.mean(interpolated_fpr, axis=0)
 
     return mean_fpr
+
+
+
+def compute_class_imbalance(y, classes=None):
+    """
+    Compute imbalance measures and normalized entropy for a multi‑class dataset.
+
+    Parameters
+    ----------
+    y : array-like, shape (n_samples,)
+        True class labels (e.g. integers 0,1,2,… or strings).
+    classes : array-like, optional
+        The set of all possible classes. If None, uses np.unique(y).
+
+    Returns
+    -------
+    ir_per_class : dict
+        {class_value: IR_class}, where
+          IR_class = max_count / count_class,
+          and classes with zero counts get IR = np.inf.
+    mean_ir : float
+        Mean of IR_class over all classes.
+    max_ir : float
+        Maximum IR_class (i.e., ratio between the most frequent and rarest classes).
+    cvir : float
+        Coefficient of variation of the IR_class values: std(IR)/mean(IR).
+    entropy : float
+        Shannon entropy of the class distribution (in nats).
+    normalized_entropy : float
+        Entropy normalized to [0,1] via dividing by log(K),
+        where K is the number of classes.
+
+    Example
+    -------
+    >>> y = [0, 2, 2, 1, 0, 2, 3, 3, 3, 3]
+    >>> ir, mean_ir, max_ir, cvir, H, H_norm = compute_class_imbalance(y)
+    >>> print(ir)        # e.g. {0:2.0, 1:4.0, 2:1.3333, 3:1.0}
+    >>> print(H, H_norm)
+    """
+    # Convert to array and determine class set
+    y = np.asarray(y)
+    if classes is None:
+        classes = np.unique(y)
+    else:
+        classes = np.asarray(classes)
+
+    # Count occurrences per class
+    counts = np.array([np.sum(y == c) for c in classes], dtype=float)
+    max_count = counts.max()
+
+    # Compute IRs (handle zero counts)
+    ir = max_count / counts
+    ir[counts == 0] = np.inf
+
+    # Aggregate IR metrics
+    mean_ir = ir.mean()
+    max_ir = ir.max()
+    std_ir = ir.std()
+    cvir = std_ir / mean_ir if mean_ir != 0 else np.nan
+
+    # Compute Shannon entropy
+    total = counts.sum()
+    probs = counts / total
+    probs = probs[probs > 0]
+    entropy = -np.sum(probs * np.log(probs))
+
+    # Normalized entropy
+    K = len(classes)
+    normalized_entropy = entropy / np.log(K) if K > 1 else 0.0
+
+    # Map back to class labels
+    ir_per_class = {int(cls): float(val) for cls, val in zip(classes, ir)}
+
+    return ir_per_class, mean_ir, max_ir, cvir, entropy, normalized_entropy
 

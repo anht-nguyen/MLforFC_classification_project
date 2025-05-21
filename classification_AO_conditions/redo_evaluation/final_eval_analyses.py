@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
+import os, sys
 
 
 # --------------------------------------------------------------------------- #
@@ -13,8 +13,9 @@ model_names = ["CNN", "MLP", "GCN", "SVC", "LogReg", "RFC"]  # models of interes
 out_dir = 'analysis_outputs'
 os.makedirs(out_dir, exist_ok=True) 
 
-
-
+# --------------------------------------------------------------------------- #
+# Load and aggregate metrics across all models
+# --------------------------------------------------------------------------- #
 for model_name in model_names:
     meta_json = os.path.join(meta_dir, f"re_evaluation_from_checkpoints_{model_name}_dist.json")
     if not os.path.exists(meta_json):
@@ -50,7 +51,7 @@ for model_name in model_names:
         'precision_macro', 'recall_macro', 'f1_macro',
         'precision_micro', 'recall_micro', 'f1_micro',
         'jaccard_macro', 'jaccard_micro',
-        'auc_macro', 'auc_micro'
+        'auc_macro', 'auc_micro', 'hamming_loss',
     ]
 
     # Generate pivot tables (with mean & err) and bar charts with error bars
@@ -145,15 +146,8 @@ print('Saved all_metrics_summary.csv')
 # --------------------------------------------------------------------------- #
 # Plot bar plots for each evaluation metric
 # --------------------------------------------------------------------------- #
-eval_metrics = [
-    'accuracy', 'balanced_accuracy',
-    'precision_macro', 'recall_macro', 'f1_macro',
-    'precision_micro', 'recall_micro', 'f1_micro',
-    'jaccard_macro', 'jaccard_micro',
-    'auc_macro', 'auc_micro'
-]
 
-for metric in eval_metrics:
+for metric in base_metrics:
     mean_col = f"{metric}_mean"
     err_col = f"{metric}_err"
     if mean_col not in metrics_df.columns:
@@ -178,3 +172,4 @@ for metric in eval_metrics:
     plt.savefig(img_path)
     plt.close()
     print(f"Saved plot {img_path}")
+

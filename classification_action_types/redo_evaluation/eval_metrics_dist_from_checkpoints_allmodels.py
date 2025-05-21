@@ -14,7 +14,7 @@ import numpy as np
 from collections import defaultdict
 from sklearn.metrics import (
     accuracy_score, balanced_accuracy_score, precision_recall_fscore_support,
-    jaccard_score, roc_auc_score, confusion_matrix, classification_report
+    jaccard_score, roc_auc_score, confusion_matrix, classification_report, hamming_loss
 )
 
 # --------------------------------------------------------------------------- #
@@ -76,6 +76,9 @@ def _compute_metrics(y_true, y_pred, y_score):
         "jaccard_micro":   jaccard_score(y_true, y_pred, average="micro"),
         "auc_macro":       roc_auc_score(y_true, y_score, multi_class="ovr",
                                          average="macro"),
+        "auc_micro":       roc_auc_score(y_true, y_score, multi_class="ovr",
+                                         average="micro"),
+        "hamming_loss":    hamming_loss(y_true, y_pred),
     })
     return metrics
 
