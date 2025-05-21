@@ -133,6 +133,10 @@ for model_name in model_names:
         # --- aggregate across 50×CV reps --------------------------------- #
         summary = {m: _agg_distribution(vals)
                    for m, vals in perfold_metrics.items()}
+        
+        summary['confusion_matrix'] = confusion_matrix(y_true_all, y_pred_all).tolist()
+        # Classification report (per class precision/recall/f1)
+        summary['classification_report'] = classification_report(y_true_all, y_pred_all, output_dict=True)
 
         # still store per‑fold raw values for future plots
         raw_per_fold = {m: [float(x) for x in vals]
