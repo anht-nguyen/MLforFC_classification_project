@@ -1,0 +1,20 @@
+Model & FC & Best Hyper-parameters & Accuracy & Precision & Recall & F1-Score \\
+\hline
+\multicolumn{5}{c}{\textbf{AO Condition Classification}}\\
+\hline
+CNN & PDC & batch\_sz=32,\; n\_layers=2,\; hidden=128,\; lr=0.001,\; ksz\_0=3,\; ksz\_1=2,\; padding=1 & 0.952 $\pm$ 0.040 & 0.953 $\pm$ 0.039 & 0.952 $\pm$ 0.040 & 0.951 $\pm$ 0.041 \\
+CNN & SpcG & batch\_sz=8,\; n\_layers=3,\; hidden=128,\; lr=0.001,\; ksz\_0=5,\; ksz\_1=2,\; padding=2 & 0.960 $\pm$ 0.034 & 0.960 $\pm$ 0.034 & 0.960 $\pm$ 0.034 & 0.958 $\pm$ 0.034 \\
+CNN & iCOH & batch\_sz=32,\; n\_layers=1,\; hidden=32,\; lr=0.001,\; ksz\_0=5,\; ksz\_1=2,\; padding=2 & 0.940 $\pm$ 0.041 & 0.939 $\pm$ 0.039 & 0.940 $\pm$ 0.041 & 0.937 $\pm$ 0.039 \\
+GNN & COH & batch\_sz=16,\; n\_layers=3,\; hidden=128,\; lr=0.001,\; dropout=0.3,\; drop\_edge=0.2 & 0.942 $\pm$ 0.037 & 0.926 $\pm$ 0.042 & 0.942 $\pm$ 0.037 & 0.932 $\pm$ 0.038 \\
+GNN & PDC & batch\_sz=32,\; n\_layers=2,\; hidden=128,\; lr=0.001,\; dropout=0.3,\; drop\_edge=0.2 & 0.959 $\pm$ 0.033 & 0.938 $\pm$ 0.043 & 0.959 $\pm$ 0.033 & 0.946 $\pm$ 0.038 \\
+GNN & PLV & batch\_sz=32,\; n\_layers=2,\; hidden=128,\; lr=0.001,\; dropout=0.2,\; drop\_edge=0.3 & 0.938 $\pm$ 0.033 & 0.872 $\pm$ 0.051 & 0.938 $\pm$ 0.033 & 0.899 $\pm$ 0.041 \\
+GNN & SpcG & batch\_sz=32,\; n\_layers=3,\; hidden=128,\; lr=0.001,\; dropout=0.2,\; drop\_edge=0.3 & 0.950 $\pm$ 0.034 & 0.926 $\pm$ 0.044 & 0.950 $\pm$ 0.034 & 0.936 $\pm$ 0.038 \\
+GNN & iCOH & batch\_sz=16,\; n\_layers=3,\; hidden=128,\; lr=0.001,\; dropout=0.2,\; drop\_edge=0.1 & 0.949 $\pm$ 0.038 & 0.942 $\pm$ 0.042 & 0.949 $\pm$ 0.038 & 0.944 $\pm$ 0.038 \\
+MLP & PDC & batch\_sz=32,\; n\_layers=2,\; hidden=128,\; lr=0.005 & 0.912 $\pm$ 0.049 & 0.913 $\pm$ 0.049 & 0.912 $\pm$ 0.049 & 0.909 $\pm$ 0.048 \\
+MLP & SpcG & batch\_sz=16,\; n\_layers=1,\; hidden=128,\; lr=0.005 & 0.551 $\pm$ 0.078 & 0.554 $\pm$ 0.081 & 0.551 $\pm$ 0.078 & 0.546 $\pm$ 0.079 \\
+MLP & iCOH & batch\_sz=32,\; n\_layers=2,\; hidden=64,\; lr=0.01 & 0.879 $\pm$ 0.055 & 0.879 $\pm$ 0.054 & 0.879 $\pm$ 0.055 & 0.875 $\pm$ 0.055 \\
+RFC & PDC & n\_est=174,\; max\_dep=20 & 0.958 $\pm$ 0.034 & 0.960 $\pm$ 0.034 & 0.958 $\pm$ 0.034 & 0.957 $\pm$ 0.034 \\
+RFC & SpcG & n\_est=200,\; max\_dep=20 & 0.959 $\pm$ 0.036 & 0.961 $\pm$ 0.032 & 0.959 $\pm$ 0.036 & 0.958 $\pm$ 0.033 \\
+RFC & iCOH & n\_est=104,\; max\_dep=20 & 0.942 $\pm$ 0.040 & 0.959 $\pm$ 0.034 & 0.942 $\pm$ 0.040 & 0.949 $\pm$ 0.036 \\
+SVM & PDC & cost=9.914,\; gamma=0.956 & 0.655 $\pm$ 0.077 & 0.660 $\pm$ 0.077 & 0.655 $\pm$ 0.077 & 0.650 $\pm$ 0.075 \\
+SVM & iCOH & cost=7.465,\; gamma=0.996 & 0.952 $\pm$ 0.037 & 0.952 $\pm$ 0.036 & 0.952 $\pm$ 0.037 & 0.951 $\pm$ 0.038 \\

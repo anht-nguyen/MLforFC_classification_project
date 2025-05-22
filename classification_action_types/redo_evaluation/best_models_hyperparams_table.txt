@@ -1,0 +1,17 @@
+Model & FC & Best Hyper-parameters & Accuracy & Precision & Recall & F1-Score \\
+\hline
+\multicolumn{5}{c}{\textbf{Action Type Classification}}\\
+\hline
+CNN & PDC & batch\_sz=8,\; n\_layers=3,\; hidden=128,\; lr=0.001,\; ksz\_0=5,\; ksz\_1=1,\; padding=1 & 0.969 $\pm$ 0.043 & 0.969 $\pm$ 0.044 & 0.969 $\pm$ 0.043 & 0.967 $\pm$ 0.043 \\
+CNN & SpcG & batch\_sz=8,\; n\_layers=2,\; hidden=64,\; lr=0.001,\; ksz\_0=5,\; ksz\_1=1,\; padding=1 & 0.957 $\pm$ 0.057 & 0.957 $\pm$ 0.055 & 0.957 $\pm$ 0.057 & 0.955 $\pm$ 0.056 \\
+CNN & iCOH & batch\_sz=8,\; n\_layers=1,\; hidden=128,\; lr=0.001,\; ksz\_0=3,\; ksz\_1=2,\; padding=1 & 0.946 $\pm$ 0.057 & 0.947 $\pm$ 0.060 & 0.946 $\pm$ 0.057 & 0.943 $\pm$ 0.061 \\
+GNN & COH & batch\_sz=32,\; n\_layers=2,\; hidden=128,\; lr=0.001,\; dropout=0.2,\; drop\_edge=0.2 & 1.000 $\pm$ 0.000 & 1.000 $\pm$ 0.000 & 1.000 $\pm$ 0.000 & 1.000 $\pm$ 0.000 \\
+GNN & PDC & batch\_sz=32,\; n\_layers=3,\; hidden=64,\; lr=0.001,\; dropout=0.5,\; drop\_edge=0.2 & 0.997 $\pm$ 0.017 & 0.997 $\pm$ 0.017 & 0.997 $\pm$ 0.017 & 0.997 $\pm$ 0.018 \\
+GNN & PLV & batch\_sz=32,\; n\_layers=3,\; hidden=128,\; lr=0.001,\; dropout=0.5,\; drop\_edge=0.4 & 0.994 $\pm$ 0.023 & 0.994 $\pm$ 0.023 & 0.994 $\pm$ 0.023 & 0.994 $\pm$ 0.020 \\
+GNN & SpcG & batch\_sz=32,\; n\_layers=2,\; hidden=64,\; lr=0.001,\; dropout=0.3,\; drop\_edge=0.3 & 1.000 $\pm$ 0.000 & 1.000 $\pm$ 0.000 & 1.000 $\pm$ 0.000 & 1.000 $\pm$ 0.000 \\
+GNN & iCOH & batch\_sz=16,\; n\_layers=1,\; hidden=128,\; lr=0.001,\; dropout=0.3,\; drop\_edge=0.3 & 0.993 $\pm$ 0.022 & 0.993 $\pm$ 0.022 & 0.993 $\pm$ 0.022 & 0.993 $\pm$ 0.024 \\
+MLP & iCOH & batch\_sz=16,\; n\_layers=1,\; hidden=128,\; lr=0.001 & 0.952 $\pm$ 0.052 & 0.952 $\pm$ 0.054 & 0.952 $\pm$ 0.052 & 0.949 $\pm$ 0.053 \\
+RFC & PDC & n\_est=182,\; max\_dep=18 & 0.963 $\pm$ 0.050 & 0.963 $\pm$ 0.053 & 0.963 $\pm$ 0.050 & 0.961 $\pm$ 0.051 \\
+RFC & SpcG & n\_est=194,\; max\_dep=19 & 0.963 $\pm$ 0.048 & 0.963 $\pm$ 0.047 & 0.963 $\pm$ 0.048 & 0.961 $\pm$ 0.047 \\
+RFC & iCOH & n\_est=178,\; max\_dep=18 & 0.975 $\pm$ 0.039 & 0.975 $\pm$ 0.041 & 0.975 $\pm$ 0.039 & 0.974 $\pm$ 0.041 \\
+SVM & iCOH & cost=8.590,\; gamma=0.998 & 0.975 $\pm$ 0.042 & 0.975 $\pm$ 0.042 & 0.975 $\pm$ 0.042 & 0.974 $\pm$ 0.042 \\

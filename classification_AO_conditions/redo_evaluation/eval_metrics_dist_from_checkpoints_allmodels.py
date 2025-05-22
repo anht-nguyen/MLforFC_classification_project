@@ -70,16 +70,22 @@ def _compute_metrics(y_true, y_pred, y_score):
         y_true, y_pred, average="macro", zero_division=0)
     p_mi, r_mi, f1_mi, _ = precision_recall_fscore_support(
         y_true, y_pred, average="micro", zero_division=0)
-
+    p_w, r_w, f1_w, _ = precision_recall_fscore_support(
+        y_true, y_pred, average="weighted", zero_division=0)
+    
     metrics.update({
         "precision_macro": p_ma, "recall_macro": r_ma, "f1_macro": f1_ma,
         "precision_micro": p_mi, "recall_micro": r_mi, "f1_micro": f1_mi,
+        "precision_weighted": p_w, "recall_weighted": r_w, "f1_weighted": f1_w,
         "jaccard_macro":   jaccard_score(y_true, y_pred, average="macro"),
         "jaccard_micro":   jaccard_score(y_true, y_pred, average="micro"),
+        "jaccard_weighted": jaccard_score(y_true, y_pred, average="weighted"),
         "auc_macro":       roc_auc_score(y_true, y_score, multi_class="ovr",
                                          average="macro"),
         "auc_micro":       roc_auc_score(y_true, y_score, multi_class="ovr",
                                          average="micro"),
+        "auc_weighted":    roc_auc_score(y_true, y_score, multi_class="ovr",
+                                            average="weighted"),
         "hamming_loss":    hamming_loss(y_true, y_pred),
     })
     return metrics
