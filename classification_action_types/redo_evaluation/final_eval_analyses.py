@@ -12,7 +12,8 @@ meta_dir = this_dir  # JSONs live here
 model_names = ["CNN", "GCN", "MLP", "LogReg", "RFC", "SVC"]  # models of interest
 model_names_save = ["CNN", "GNN", "MLP", "LogReg", "RFC", "SVM"]  # models to save in LaTeX table]
 model_names_best_params = ["CNN", "GCN", "MLP", "logreg", "RFC", "svc"]  
-FC_metrics_save = ["iCOH", "COH", "PDC", "PLV", "SpcG"]
+FC_metrics = ["COH", "iCOH", "PDC", "PLV", "Spectral Granger"]
+FC_metrics_save = [ "COH", "iCOH", "PDC", "PLV", "SpcG"]
 out_dir = 'analysis_outputs'
 os.makedirs(out_dir, exist_ok=True) 
 dl_ckpt_dir   = os.path.join(this_dir, "dl_checkpoints")   # <- adjust if needed
@@ -36,7 +37,7 @@ for model_name in model_names:
     for clf, fc_dict in data.items():
         for fc, entry in fc_dict.items():
             metrics = entry['metrics']
-            row = {'Classifier': clf, 'FC Metric': fc}
+            row = {'Classifier': model_names_save[model_names.index(clf)], 'FC Metric': FC_metrics_save[FC_metrics.index(fc)]}
             for k, v in metrics.items():
                 if isinstance(v, (int, float)):
                     row[k] = v
@@ -75,7 +76,7 @@ for model_name in model_names:
         print(f'Saved {csv_path}')
 
         # Plot with error bars
-        ax = pivot_mean.plot(kind='bar', yerr=pivot_err, figsize=(10, 6),
+        ax = pivot_mean.plot(kind='bar', yerr=pivot_err, figsize=(10, 4),
                             title=m.replace('_', ' ').title())
         ax.set_xlabel('FC Metric')
         ax.set_ylabel(f"{m.replace('_', ' ').title()} (mean ± error)")
@@ -127,9 +128,9 @@ for model_name in model_names:
         raise FileNotFoundError(f"Meta JSON not found: {path}")
     data = json.load(open(path, 'r'))
     for clf, fc_dict in data.items():
-        for fc_metric, entry in fc_dict.items():
+        for fc, entry in fc_dict.items():
             metrics = entry.get('metrics', {})
-            row = {'Model': clf, 'FC Metric': fc_metric}
+            row = {'Model': model_names_save[model_names.index(clf)], 'FC Metric': FC_metrics_save[FC_metrics.index(fc)]}
             for key, val in metrics.items():
                 mean_col = f"{key}_mean"
                 err_col = f"{key}_err"
@@ -165,12 +166,13 @@ for metric in base_metrics:
     print(f"Saved {summary_path}")
 
     # Plot all models side by side with error bars
-    ax = pivot_mean.plot(kind='bar', yerr=pivot_err, figsize=(10, 6),
-                         title=metric.replace('_', ' ').title())
+    ax = pivot_mean.plot(kind='bar', yerr=pivot_err, figsize=(10, 4),
+                         title=metric.replace('_', ' ').title() )
     ax.set_xlabel('FC Metric')
     ax.set_ylabel(f"{metric.replace('_', ' ').title()} (mean ± error)")
+    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     plt.tight_layout()
-    img_path = os.path.join(out_dir, f"{metric}_all_models_bar.png")
+    img_path = os.path.join(out_dir, f"{metric}_all_models_bar_action_type.png")
     plt.savefig(img_path)
     plt.close()
     print(f"Saved plot {img_path}")
